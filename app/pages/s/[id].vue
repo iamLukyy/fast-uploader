@@ -96,15 +96,14 @@ onMounted(() => {
           </h1>
 
           <!-- Image preview -->
-          <div v-if="isPreviewableImage" class="mb-6 flex justify-center">
-            <UTooltip text="Open full size">
-              <a :href="file.downloadUrl" target="_blank" class="block cursor-pointer">
-                <img
-                  :src="file.downloadUrl"
-                  class="max-w-full max-h-96 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                />
-              </a>
-            </UTooltip>
+          <div v-if="isPreviewableImage" class="mb-6 flex flex-col items-center gap-2">
+            <a :href="file.downloadUrl" target="_blank" class="block cursor-pointer group">
+              <img
+                :src="file.downloadUrl"
+                class="max-w-full max-h-96 rounded-lg shadow-md group-hover:shadow-xl group-hover:scale-[1.02] transition-all duration-200"
+              />
+            </a>
+            <span class="text-xs text-gray-400 dark:text-gray-500">Click image to open full size</span>
           </div>
 
           <!-- Non-previewable image icon -->
