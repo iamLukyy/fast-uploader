@@ -5,7 +5,7 @@
 <h1 align="center">FAST UPLOADER</h1>
 
 <p align="center">
-  <strong>Simple, self-hosted file sharing with style</strong>
+  <strong>Self-hosted file sharing</strong>
 </p>
 
 <p align="center">
@@ -20,24 +20,21 @@
 
 ## Screenshots
 
-<p align="center">
-  <img src="https://upload.karel.app/f/b2288bbe-b9ed-4a40-baad-a6db95e1f230.png" width="280" alt="Login">
-  <img src="https://upload.karel.app/f/96c09446-2e7f-4a4e-ba0d-1fbd980ebea3.png" width="280" alt="Dashboard">
-  <img src="https://upload.karel.app/f/e16506dc-5db8-4fc7-94b4-52767dfa7ed2.png" width="280" alt="Share Page">
-</p>
+| Login | Dashboard | Share Page |
+|:-----:|:---------:|:----------:|
+| ![Login](https://upload.karel.app/f/b2288bbe-b9ed-4a40-baad-a6db95e1f230.png) | ![Dashboard](https://upload.karel.app/f/96c09446-2e7f-4a4e-ba0d-1fbd980ebea3.png) | ![Share](https://upload.karel.app/f/e16506dc-5db8-4fc7-94b4-52767dfa7ed2.png) |
 
 ---
 
 ## Features
 
-- **Drag & Drop Upload** - Just drop your files
-- **Progress Bar** - Real-time upload progress
-- **Shareable Links** - Direct links & share pages
-- **EXIF Metadata** - Camera info for photos (ISO, aperture, shutter speed...)
-- **Image Gallery** - Preview images with full-size view
-- **Dark Mode** - Easy on the eyes
-- **Password Protected** - Simple authentication
-- **Self-Hosted** - Your data, your server
+- Drag & drop upload with progress
+- Shareable links (direct + share pages)
+- EXIF metadata for photos
+- Image preview with full-size view
+- Dark mode
+- Password protected
+- Self-hosted
 
 ---
 
@@ -51,11 +48,11 @@ cp .env.example .env
 docker compose up -d
 ```
 
-**That's it!** Open `http://localhost:3000` (or your domain).
+Open `http://localhost:3000`
 
 ---
 
-## Environment Variables
+## Environment
 
 ```env
 NUXT_SESSION_SECRET=your-secret-key-min-32-chars
@@ -68,15 +65,7 @@ NUXT_PUBLIC_BASE_URL=https://upload.example.com
 
 ## Run Anywhere
 
-Fast Uploader runs on any system with Docker:
-
-| Platform | Status |
-|----------|--------|
-| VPS / Cloud | Works |
-| Raspberry Pi | Works |
-| Home Server | Works |
-| NAS (Synology, etc.) | Works |
-| Local Machine | Works |
+Works on VPS, Raspberry Pi, NAS, home server, local machine.
 
 ### Without Docker
 
@@ -88,15 +77,9 @@ node .output/server/index.mjs
 
 ---
 
-## Tech Stack
+## Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | [Nuxt 4](https://nuxt.com) |
-| UI | [Nuxt UI](https://ui.nuxt.com) + Tailwind CSS |
-| Database | SQLite (better-sqlite3) |
-| Storage | Local filesystem |
-| Container | Docker |
+Nuxt 4 / Nuxt UI / Tailwind CSS / SQLite / Docker
 
 ---
 
