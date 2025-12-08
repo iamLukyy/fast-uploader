@@ -43,8 +43,8 @@ function handleFileSelect(e: Event) {
     class="relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200"
     :class="[
       isDragOver
-        ? 'border-primary bg-primary/5 scale-[1.02]'
-        : 'border-gray-300 dark:border-gray-600 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800'
+        ? 'border-primary bg-primary/5 scale-[1.02] shadow-md'
+        : 'border-gray-300 dark:border-gray-600 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md'
     ]"
     @drop.prevent="handleDrop"
     @dragover="handleDragOver"

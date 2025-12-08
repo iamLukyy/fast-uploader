@@ -116,6 +116,21 @@ export const useUpload = () => {
     )
   }
 
+  const retryUpload = async (id: string) => {
+    const upload = uploads.value.find(u => u.id === id)
+    if (!upload || upload.status !== 'error') return
+
+    // Remove the failed upload
+    removeUpload(id)
+
+    // Try again
+    try {
+      await uploadFile(upload.file)
+    } catch {
+      // Error is handled in uploadFile
+    }
+  }
+
   const hasActiveUploads = computed(() =>
     uploads.value.some(u => u.status === 'pending' || u.status === 'uploading')
   )
@@ -127,6 +142,7 @@ export const useUpload = () => {
     cancelUpload,
     removeUpload,
     clearCompleted,
+    retryUpload,
     hasActiveUploads
   }
 }

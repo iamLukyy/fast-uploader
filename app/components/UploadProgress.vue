@@ -8,6 +8,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   cancel: []
   remove: []
+  retry: []
 }>()
 
 const { formatSize } = useFiles()
@@ -32,25 +33,25 @@ const statusIcon = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+  <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
     <UIcon
       :name="statusIcon"
       class="w-5 h-5 flex-shrink-0"
       :class="[
         upload.status === 'uploading' && 'animate-spin',
-        statusColor === 'success' && 'text-green-500',
-        statusColor === 'error' && 'text-red-500',
+        statusColor === 'success' && 'text-green-500 dark:text-green-400',
+        statusColor === 'error' && 'text-red-500 dark:text-red-400',
         statusColor === 'primary' && 'text-primary',
         statusColor === 'neutral' && 'text-gray-400'
       ]"
     />
 
     <div class="flex-1 min-w-0">
-      <p class="text-sm font-medium truncate">{{ upload.file.name }}</p>
-      <div class="flex items-center gap-2 text-xs text-gray-500">
+      <p class="text-sm font-medium truncate dark:text-white">{{ upload.file.name }}</p>
+      <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
         <span>{{ formatSize(upload.file.size) }}</span>
         <span v-if="upload.status === 'uploading'">{{ upload.progress }}%</span>
-        <span v-else-if="upload.status === 'error'" class="text-red-500">
+        <span v-else-if="upload.status === 'error'" class="text-red-500 dark:text-red-400">
           {{ upload.error }}
         </span>
       </div>
@@ -63,12 +64,24 @@ const statusIcon = computed(() => {
       />
     </div>
 
+    <!-- Retry button for failed uploads -->
+    <UButton
+      v-if="upload.status === 'error'"
+      icon="i-lucide-refresh-cw"
+      color="error"
+      variant="soft"
+      size="xs"
+      class="cursor-pointer"
+      @click="emit('retry')"
+    />
+
     <UButton
       v-if="upload.status === 'uploading'"
       icon="i-lucide-x"
       color="neutral"
       variant="ghost"
       size="xs"
+      class="cursor-pointer"
       @click="emit('cancel')"
     />
     <UButton
@@ -77,6 +90,7 @@ const statusIcon = computed(() => {
       color="neutral"
       variant="ghost"
       size="xs"
+      class="cursor-pointer"
       @click="emit('remove')"
     />
   </div>

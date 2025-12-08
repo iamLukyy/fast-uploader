@@ -11,7 +11,7 @@ const isDark = computed({
   set: (v) => { colorMode.preference = v ? 'dark' : 'light' }
 })
 
-const { data: file, error } = await useFetch(`/api/public/${route.params.id}`)
+const { data: file, error, pending } = await useFetch(`/api/public/${route.params.id}`)
 
 const isPreviewableImage = computed(() => {
   if (!file.value) return false
@@ -57,7 +57,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
     <!-- Header -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -78,8 +78,13 @@ onMounted(() => {
 
     <!-- Content -->
     <main class="flex-1 flex items-center justify-center px-4 py-12">
+      <!-- Loading state -->
+      <div v-if="pending" class="w-full max-w-2xl">
+        <USkeleton class="h-64 rounded-xl" />
+      </div>
+
       <!-- Error state -->
-      <div v-if="error" class="text-center">
+      <div v-else-if="error" class="text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
           <UIcon name="i-lucide-file-x" class="w-8 h-8 text-red-500" />
         </div>
@@ -89,7 +94,7 @@ onMounted(() => {
 
       <!-- File display -->
       <div v-else-if="file" class="w-full max-w-2xl">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
           <!-- Filename -->
           <h1 class="text-xl font-bold text-gray-900 dark:text-white text-center mb-6 break-all">
             {{ file.name }}
@@ -100,6 +105,8 @@ onMounted(() => {
             <a :href="file.downloadUrl" target="_blank" class="block cursor-pointer group">
               <img
                 :src="file.downloadUrl"
+                :alt="file.name"
+                loading="lazy"
                 class="max-w-full max-h-96 rounded-lg shadow-md group-hover:shadow-xl group-hover:scale-[1.02] transition-all duration-200"
               />
             </a>
@@ -108,7 +115,7 @@ onMounted(() => {
 
           <!-- Non-previewable image icon -->
           <div v-else-if="isImageWithExif" class="flex justify-center mb-6">
-            <div class="w-24 h-24 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <div class="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
               <UIcon name="i-lucide-image" class="w-12 h-12 text-gray-400" />
             </div>
           </div>

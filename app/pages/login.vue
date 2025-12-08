@@ -43,7 +43,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
     <!-- Header -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -65,10 +65,10 @@ async function handleLogin() {
     <!-- Login form -->
     <main class="flex-1 flex items-center justify-center px-4 py-12">
       <div class="w-full max-w-sm">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
           <!-- Logo & Title -->
           <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-4">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 mb-4">
               <UIcon name="i-lucide-upload-cloud" class="w-8 h-8 text-primary" />
             </div>
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">

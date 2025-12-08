@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 const { files, total, loading, fetchFiles, deleteFile, addFile } = useFiles()
-const { uploads, uploadFiles, cancelUpload, removeUpload, clearCompleted, hasActiveUploads } = useUpload()
+const { uploads, uploadFiles, cancelUpload, removeUpload, clearCompleted, hasActiveUploads, retryUpload } = useUpload()
 const toast = useToast()
 
 // Fetch files on mount
@@ -77,6 +77,7 @@ const activeUploads = computed(() =>
           :upload="upload"
           @cancel="cancelUpload(upload.id)"
           @remove="removeUpload(upload.id)"
+          @retry="retryUpload(upload.id)"
         />
       </div>
     </section>
@@ -108,11 +109,13 @@ const activeUploads = computed(() =>
       <!-- Empty State -->
       <div
         v-else-if="files.length === 0"
-        class="text-center py-12 text-gray-500"
+        class="text-center py-16 text-gray-500 dark:text-gray-400"
       >
-        <UIcon name="i-lucide-folder-open" class="w-12 h-12 mx-auto mb-3 opacity-50" />
-        <p>No files uploaded yet</p>
-        <p class="text-sm">Drop some files above to get started</p>
+        <div class="relative inline-block">
+          <UIcon name="i-lucide-cloud-upload" class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 animate-bounce" />
+        </div>
+        <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Žádné soubory</h3>
+        <p class="text-sm mt-1">Přetáhněte soubory výše nebo klikněte pro výběr</p>
       </div>
 
       <!-- File Grid -->
