@@ -11,6 +11,22 @@ Moderní file upload aplikace na **upload.karel.app**
 - **Storage**: Local filesystem (/data/uploads)
 - **Container**: Docker + Traefik
 
+## Theme / Design
+```ts
+// app/app.config.ts
+ui: {
+  colors: {
+    primary: 'green',
+    neutral: 'slate'
+  }
+}
+```
+- **Primary**: Green (buttons, accents, icons)
+- **Background**: gray-50 (light) / gray-900 (dark)
+- **Cards**: white (light) / gray-800 (dark)
+- **Borders**: gray-200 (light) / gray-700 (dark)
+- **Dark mode**: Supported via useColorMode()
+
 ## Key Configuration
 - **Auth Password**: `luky` (env: NUXT_AUTH_PASSWORD)
 - **Max File Size**: 500 MB
