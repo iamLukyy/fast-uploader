@@ -65,7 +65,7 @@ NUXT_PUBLIC_BASE_URL=https://upload.example.com
 
 ## Run Anywhere
 
-Works on VPS, Raspberry Pi, NAS, home server, local machine.
+Works on any Linux with Docker or Node.js.
 
 ### Without Docker
 
