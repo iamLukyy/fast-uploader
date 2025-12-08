@@ -5,7 +5,7 @@
 <h1 align="center">FAST UPLOADER</h1>
 
 <p align="center">
-  <strong>Self-hosted file sharing</strong>
+  <strong>Your own file sharing server in minutes</strong>
 </p>
 
 <p align="center">
@@ -15,6 +15,27 @@
   <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
   <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
+
+<p align="center">
+  <a href="https://github.com/iamLukyy/fast-uploader/stargazers">
+    <img src="https://img.shields.io/github/stars/iamLukyy/fast-uploader?style=social" alt="Stars">
+  </a>
+  <a href="https://github.com/iamLukyy/fast-uploader/fork">
+    <img src="https://img.shields.io/github/forks/iamLukyy/fast-uploader?style=social" alt="Forks">
+  </a>
+</p>
+
+---
+
+## Why?
+
+Tired of:
+- Uploading files to random websites?
+- Links expiring after 24 hours?
+- File size limits?
+- Privacy concerns?
+
+Host your own. It takes 5 minutes.
 
 ---
 
@@ -28,13 +49,15 @@
 
 ## Features
 
-- Drag & drop upload with progress
-- Shareable links (direct + share pages)
-- EXIF metadata for photos
+- Drag & drop upload with progress bar
+- Shareable links (direct download + share pages)
+- EXIF metadata display for photos
 - Image preview with full-size view
 - Dark mode
 - Password protected
-- Self-hosted
+- No file size limits (you control it)
+- No expiration (your files stay forever)
+- Self-hosted (your data, your server)
 
 ---
 
@@ -44,11 +67,11 @@
 git clone https://github.com/iamLukyy/fast-uploader.git
 cd fast-uploader
 cp .env.example .env
-# Edit .env with your settings
+nano .env  # Set your password and secret
 docker compose up -d
 ```
 
-Open `http://localhost:3000`
+Done. Open `http://localhost:3000`
 
 ---
 
@@ -57,23 +80,66 @@ Open `http://localhost:3000`
 ```env
 NUXT_SESSION_SECRET=your-secret-key-min-32-chars
 NUXT_AUTH_PASSWORD=your-password
-DOMAIN=upload.example.com
-NUXT_PUBLIC_BASE_URL=https://upload.example.com
+DOMAIN=localhost
 ```
 
 ---
 
-## Run Anywhere
+## Host It Yourself
 
-Works on any Linux with Docker or Node.js.
+### Option 1: Raspberry Pi (free, at home)
 
-### Without Docker
+Works on Raspberry Pi 4/5 with Docker:
 
 ```bash
+# Install Docker on Raspberry Pi
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+# Logout and login again
+
+# Clone and run
+git clone https://github.com/iamLukyy/fast-uploader.git
+cd fast-uploader
+cp .env.example .env
+nano .env
+docker compose up -d
+```
+
+Want public access? Forward port 3000 in your router settings.
+
+### Option 2: VPS ($3-5/month)
+
+Any cheap VPS works (Hetzner, DigitalOcean, Contabo...):
+
+```bash
+git clone https://github.com/iamLukyy/fast-uploader.git
+cd fast-uploader
+cp .env.example .env
+nano .env  # Set DOMAIN=your-domain.com
+docker compose up -d
+```
+
+Add a reverse proxy (nginx, Traefik, Caddy) for HTTPS.
+
+### Option 3: Without Docker
+
+```bash
+# Requires Node.js 20+ and pnpm
 pnpm install
 pnpm build
 node .output/server/index.mjs
 ```
+
+---
+
+## Contributing
+
+Contributions welcome! Feel free to:
+
+- Open issues for bugs or feature requests
+- Submit pull requests
+- Improve documentation
+- Share the project
 
 ---
 
@@ -85,4 +151,4 @@ Nuxt 4 / Nuxt UI / Tailwind CSS / SQLite / Docker
 
 ## License
 
-MIT
+MIT - do whatever you want with it.
