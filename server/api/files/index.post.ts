@@ -1,6 +1,7 @@
 import { requireAuth } from '../../utils/session'
 import { insertFile } from '../../utils/db'
 import { storeFile, MAX_FILE_SIZE, sanitizeFilename } from '../../utils/storage'
+import { extractExif } from '../../utils/exif'
 
 export default defineEventHandler(async (event) => {
   await requireAuth(event)
@@ -37,13 +38,17 @@ export default defineEventHandler(async (event) => {
   // Store file
   const stored = storeFile(originalName, fileField.data)
 
+  // Extract EXIF data for images
+  const exifData = await extractExif(stored.storedName, mimeType)
+
   // Insert into database
   const record = insertFile({
     id: stored.id,
     original_name: originalName,
     stored_name: stored.storedName,
     mime_type: mimeType,
-    size: fileField.data.length
+    size: fileField.data.length,
+    exif_data: exifData
   })
 
   return {
@@ -53,7 +58,9 @@ export default defineEventHandler(async (event) => {
       storedName: record.stored_name,
       mimeType: record.mime_type,
       size: record.size,
-      uploadedAt: record.uploaded_at
+      uploadedAt: record.uploaded_at,
+      shortId: record.short_id,
+      exifData: record.exif_data ? JSON.parse(record.exif_data) : null
     }
   }
 })

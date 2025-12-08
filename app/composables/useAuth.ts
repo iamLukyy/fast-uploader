@@ -5,7 +5,9 @@ export const useAuth = () => {
   const checkSession = async () => {
     loading.value = true
     try {
-      const { authenticated: isAuth } = await $fetch('/api/auth/session')
+      const { authenticated: isAuth } = await $fetch('/api/auth/session', {
+        headers: import.meta.server ? useRequestHeaders(['cookie']) : {}
+      })
       authenticated.value = isAuth
     } catch {
       authenticated.value = false

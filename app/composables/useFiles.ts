@@ -1,3 +1,14 @@
+export interface ExifData {
+  make?: string
+  model?: string
+  shutterSpeed?: string
+  aperture?: number
+  iso?: number
+  focalLength?: string
+  width?: number
+  height?: number
+}
+
 export interface FileItem {
   id: string
   name: string
@@ -5,6 +16,8 @@ export interface FileItem {
   mimeType: string
   size: number
   uploadedAt: string
+  shortId: string | null
+  exifData: ExifData | null
 }
 
 export const useFiles = () => {
@@ -53,6 +66,11 @@ export const useFiles = () => {
     return `${baseUrl}/f/${file.storedName}`
   }
 
+  const getPageUrl = (file: FileItem): string => {
+    if (!file.shortId) return getPublicUrl(file)
+    return `${baseUrl}/s/${file.shortId}`
+  }
+
   const addFile = (file: FileItem) => {
     files.value = [file, ...files.value]
     total.value++
@@ -74,6 +92,7 @@ export const useFiles = () => {
     fetchFiles,
     deleteFile,
     getPublicUrl,
+    getPageUrl,
     addFile,
     formatSize
   }

@@ -17,7 +17,9 @@ export default defineEventHandler(async (event) => {
       storedName: f.stored_name,
       mimeType: f.mime_type,
       size: f.size,
-      uploadedAt: f.uploaded_at
+      uploadedAt: f.uploaded_at,
+      shortId: f.short_id,
+      exifData: f.exif_data ? JSON.parse(f.exif_data) : null
     })),
     total,
     limit,

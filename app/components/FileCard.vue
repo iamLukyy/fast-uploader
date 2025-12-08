@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FileItem } from '~/composables/useFiles'
+import { getFileIcon } from '~/utils/fileIcons'
 
 const props = defineProps<{
   file: FileItem
@@ -9,21 +10,13 @@ const emit = defineEmits<{
   delete: []
 }>()
 
-const { getPublicUrl, formatSize } = useFiles()
+const { getPublicUrl, getPageUrl, formatSize } = useFiles()
 const toast = useToast()
 
 const fileUrl = computed(() => getPublicUrl(props.file))
+const pageUrl = computed(() => getPageUrl(props.file))
 
-const fileIcon = computed(() => {
-  const type = props.file.mimeType
-  if (type.startsWith('image/')) return 'i-lucide-image'
-  if (type.startsWith('video/')) return 'i-lucide-video'
-  if (type.startsWith('audio/')) return 'i-lucide-music'
-  if (type.includes('pdf')) return 'i-lucide-file-text'
-  if (type.includes('zip') || type.includes('rar') || type.includes('tar')) return 'i-lucide-archive'
-  if (type.includes('text') || type.includes('json')) return 'i-lucide-file-code'
-  return 'i-lucide-file'
-})
+const fileIcon = computed(() => getFileIcon(props.file.mimeType, props.file.name))
 
 const formattedDate = computed(() => {
   return new Date(props.file.uploadedAt).toLocaleDateString('cs-CZ', {
@@ -34,14 +27,38 @@ const formattedDate = computed(() => {
   })
 })
 
-async function copyLink() {
+const copiedDirect = ref(false)
+const copiedPage = ref(false)
+
+async function copyDirectLink() {
   try {
     await navigator.clipboard.writeText(fileUrl.value)
+    copiedDirect.value = true
     toast.add({
-      title: 'Link copied!',
+      title: 'Direct link copied!',
       icon: 'i-lucide-check',
       color: 'success'
     })
+    setTimeout(() => { copiedDirect.value = false }, 2000)
+  } catch {
+    toast.add({
+      title: 'Failed to copy',
+      icon: 'i-lucide-x',
+      color: 'error'
+    })
+  }
+}
+
+async function copyPageLink() {
+  try {
+    await navigator.clipboard.writeText(pageUrl.value)
+    copiedPage.value = true
+    toast.add({
+      title: 'Page link copied!',
+      icon: 'i-lucide-check',
+      color: 'success'
+    })
+    setTimeout(() => { copiedPage.value = false }, 2000)
   } catch {
     toast.add({
       title: 'Failed to copy',
@@ -86,34 +103,48 @@ function handleDelete() {
     </div>
 
     <div class="flex gap-2 mt-3">
+      <!-- Copy Direct Link -->
       <UButton
-        icon="i-lucide-copy"
-        color="primary"
+        :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
+        :color="copiedDirect ? 'success' : 'neutral'"
         variant="soft"
         size="xs"
-        block
-        class="cursor-pointer"
-        @click="copyLink"
+        class="cursor-pointer flex-1"
+        @click="copyDirectLink"
       >
-        Copy link
+        {{ copiedDirect ? 'Copied!' : 'Direct' }}
       </UButton>
 
+      <!-- Copy Page Link -->
       <UButton
-        icon="i-lucide-download"
+        :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share'"
+        :color="copiedPage ? 'success' : 'primary'"
+        variant="soft"
+        size="xs"
+        class="cursor-pointer flex-1"
+        @click="copyPageLink"
+      >
+        {{ copiedPage ? 'Copied!' : 'Share' }}
+      </UButton>
+
+      <!-- Open -->
+      <UButton
+        icon="i-lucide-external-link"
         color="neutral"
         variant="soft"
         size="xs"
-        :to="fileUrl"
+        :to="pageUrl"
         target="_blank"
-      >
-        Open
-      </UButton>
+        class="cursor-pointer"
+      />
 
+      <!-- Delete -->
       <UButton
         :icon="confirmDelete ? 'i-lucide-check' : 'i-lucide-trash-2'"
         :color="confirmDelete ? 'error' : 'neutral'"
         :variant="confirmDelete ? 'solid' : 'soft'"
         size="xs"
+        class="cursor-pointer"
         @click="handleDelete"
       />
     </div>

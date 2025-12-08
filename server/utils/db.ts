@@ -26,6 +26,28 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_files_stored_name ON files(stored_name);
 `)
 
+// Migration: add new columns if they don't exist
+try {
+  db.exec(`ALTER TABLE files ADD COLUMN short_id TEXT`)
+} catch { /* column already exists */ }
+try {
+  db.exec(`ALTER TABLE files ADD COLUMN exif_data TEXT`)
+} catch { /* column already exists */ }
+
+// Create index on short_id after migration
+db.exec(`CREATE INDEX IF NOT EXISTS idx_files_short_id ON files(short_id);`)
+
+export interface ExifData {
+  make?: string
+  model?: string
+  shutterSpeed?: string
+  aperture?: number
+  iso?: number
+  focalLength?: string
+  width?: number
+  height?: number
+}
+
 export interface FileRecord {
   id: string
   original_name: string
@@ -33,14 +55,47 @@ export interface FileRecord {
   mime_type: string
   size: number
   uploaded_at: string
+  short_id: string | null
+  exif_data: string | null
 }
 
-export function insertFile(file: Omit<FileRecord, 'uploaded_at'>): FileRecord {
+export function generateShortId(length = 6): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return result
+}
+
+function getUniqueShortId(): string {
+  let shortId = generateShortId()
+  let attempts = 0
+  while (getFileByShortId(shortId) && attempts < 10) {
+    shortId = generateShortId()
+    attempts++
+  }
+  return shortId
+}
+
+export interface InsertFileData {
+  id: string
+  original_name: string
+  stored_name: string
+  mime_type: string
+  size: number
+  exif_data?: ExifData | null
+}
+
+export function insertFile(file: InsertFileData): FileRecord {
+  const shortId = getUniqueShortId()
+  const exifJson = file.exif_data ? JSON.stringify(file.exif_data) : null
+
   const stmt = db.prepare(`
-    INSERT INTO files (id, original_name, stored_name, mime_type, size)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO files (id, original_name, stored_name, mime_type, size, short_id, exif_data)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `)
-  stmt.run(file.id, file.original_name, file.stored_name, file.mime_type, file.size)
+  stmt.run(file.id, file.original_name, file.stored_name, file.mime_type, file.size, shortId, exifJson)
 
   return getFileById(file.id)!
 }
@@ -53,6 +108,11 @@ export function getFileById(id: string): FileRecord | undefined {
 export function getFileByStoredName(storedName: string): FileRecord | undefined {
   const stmt = db.prepare('SELECT * FROM files WHERE stored_name = ?')
   return stmt.get(storedName) as FileRecord | undefined
+}
+
+export function getFileByShortId(shortId: string): FileRecord | undefined {
+  const stmt = db.prepare('SELECT * FROM files WHERE short_id = ?')
+  return stmt.get(shortId) as FileRecord | undefined
 }
 
 export function getAllFiles(limit = 100, offset = 0): { files: FileRecord[]; total: number } {

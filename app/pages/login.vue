@@ -56,6 +56,7 @@ async function handleLogin() {
           :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
           color="neutral"
           variant="ghost"
+          class="cursor-pointer"
           @click="isDark = !isDark"
         />
       </div>
@@ -127,10 +128,20 @@ async function handleLogin() {
           </form>
         </div>
 
-        <p class="text-center text-sm text-gray-400 dark:text-gray-500 mt-6">
-          Secure file sharing
-        </p>
       </div>
     </main>
+
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-center">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          Vibecoded by
+          <a
+            href="https://github.com/iamLukyy"
+            target="_blank"
+            class="text-primary hover:underline"
+          >Luky</a>
+        </span>
+      </div>
+    </footer>
   </div>
 </template>

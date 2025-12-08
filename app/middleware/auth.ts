@@ -1,10 +1,7 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const { authenticated, checkSession, loading } = useAuth()
+  const { authenticated, checkSession } = useAuth()
 
-  // Check session if not already loaded
-  if (loading.value) {
-    await checkSession()
-  }
+  await checkSession()
 
   if (!authenticated.value) {
     return navigateTo('/login')
