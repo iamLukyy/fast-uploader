@@ -2,6 +2,7 @@ import { requireAuth } from '../../utils/session'
 import { insertFile } from '../../utils/db'
 import { storeFile, MAX_FILE_SIZE, sanitizeFilename } from '../../utils/storage'
 import { extractExif } from '../../utils/exif'
+import { generateThumbnail } from '../../utils/thumbnail'
 
 export default defineEventHandler(async (event) => {
   await requireAuth(event)
@@ -41,6 +42,9 @@ export default defineEventHandler(async (event) => {
   // Extract EXIF data for images
   const exifData = await extractExif(stored.storedName, mimeType)
 
+  // Generate thumbnail for large images
+  const thumbnailName = await generateThumbnail(stored.storedName, mimeType)
+
   // Insert into database
   const record = insertFile({
     id: stored.id,
@@ -48,7 +52,8 @@ export default defineEventHandler(async (event) => {
     stored_name: stored.storedName,
     mime_type: mimeType,
     size: fileField.data.length,
-    exif_data: exifData
+    exif_data: exifData,
+    thumbnail_name: thumbnailName
   })
 
   return {
@@ -60,7 +65,8 @@ export default defineEventHandler(async (event) => {
       size: record.size,
       uploadedAt: record.uploaded_at,
       shortId: record.short_id,
-      exifData: record.exif_data ? JSON.parse(record.exif_data) : null
+      exifData: record.exif_data ? JSON.parse(record.exif_data) : null,
+      thumbnailUrl: record.thumbnail_name ? `/f/${record.thumbnail_name}` : null
     }
   }
 })

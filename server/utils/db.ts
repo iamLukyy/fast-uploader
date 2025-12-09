@@ -33,6 +33,9 @@ try {
 try {
   db.exec(`ALTER TABLE files ADD COLUMN exif_data TEXT`)
 } catch { /* column already exists */ }
+try {
+  db.exec(`ALTER TABLE files ADD COLUMN thumbnail_name TEXT`)
+} catch { /* column already exists */ }
 
 // Create index on short_id after migration
 db.exec(`CREATE INDEX IF NOT EXISTS idx_files_short_id ON files(short_id);`)
@@ -57,6 +60,7 @@ export interface FileRecord {
   uploaded_at: string
   short_id: string | null
   exif_data: string | null
+  thumbnail_name: string | null
 }
 
 export function generateShortId(length = 6): string {
@@ -85,6 +89,7 @@ export interface InsertFileData {
   mime_type: string
   size: number
   exif_data?: ExifData | null
+  thumbnail_name?: string | null
 }
 
 export function insertFile(file: InsertFileData): FileRecord {
@@ -92,10 +97,10 @@ export function insertFile(file: InsertFileData): FileRecord {
   const exifJson = file.exif_data ? JSON.stringify(file.exif_data) : null
 
   const stmt = db.prepare(`
-    INSERT INTO files (id, original_name, stored_name, mime_type, size, short_id, exif_data)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO files (id, original_name, stored_name, mime_type, size, short_id, exif_data, thumbnail_name)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `)
-  stmt.run(file.id, file.original_name, file.stored_name, file.mime_type, file.size, shortId, exifJson)
+  stmt.run(file.id, file.original_name, file.stored_name, file.mime_type, file.size, shortId, exifJson, file.thumbnail_name || null)
 
   return getFileById(file.id)!
 }

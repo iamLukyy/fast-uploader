@@ -18,6 +18,7 @@ export interface FileItem {
   uploadedAt: string
   shortId: string | null
   exifData: ExifData | null
+  thumbnailUrl: string | null
 }
 
 export const useFiles = () => {

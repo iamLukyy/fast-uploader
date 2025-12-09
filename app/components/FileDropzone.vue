@@ -36,6 +36,41 @@ function handleFileSelect(e: Event) {
   // Reset input
   input.value = ''
 }
+
+// Handle Ctrl+V paste from clipboard
+function handlePaste(e: ClipboardEvent) {
+  const items = e.clipboardData?.items
+  if (!items) return
+
+  const files: File[] = []
+  for (const item of items) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile()
+      if (file) {
+        // Generate filename for pasted images (e.g. screenshots)
+        if (file.type.startsWith('image/') && file.name === 'image.png') {
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+          const newFile = new File([file], `screenshot-${timestamp}.png`, { type: file.type })
+          files.push(newFile)
+        } else {
+          files.push(file)
+        }
+      }
+    }
+  }
+
+  if (files.length > 0) {
+    emit('filesSelected', files)
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('paste', handlePaste)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('paste', handlePaste)
+})
 </script>
 
 <template>

@@ -31,6 +31,11 @@ const isImage = computed(() => {
   return props.file.mimeType.startsWith('image/')
 })
 
+// Použít thumbnail pokud existuje, jinak plnou URL
+const thumbnailSrc = computed(() => {
+  return props.file.thumbnailUrl || fileUrl.value
+})
+
 const showDeleteModal = ref(false)
 
 const copiedDirect = ref(false)
@@ -89,7 +94,7 @@ function confirmDelete() {
     <div class="flex items-start gap-3">
       <!-- Thumbnail pro obrázky, ikona pro ostatní -->
       <div v-if="isImage" class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-        <img :src="fileUrl" :alt="file.name" class="w-full h-full object-cover" />
+        <img :src="thumbnailSrc" :alt="file.name" class="w-full h-full object-cover" loading="lazy" />
       </div>
       <div v-else class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
         <UIcon :name="fileIcon" class="w-5 h-5 text-gray-500" />

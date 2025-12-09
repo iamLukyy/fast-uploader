@@ -19,7 +19,8 @@ export default defineEventHandler(async (event) => {
       size: f.size,
       uploadedAt: f.uploaded_at,
       shortId: f.short_id,
-      exifData: f.exif_data ? JSON.parse(f.exif_data) : null
+      exifData: f.exif_data ? JSON.parse(f.exif_data) : null,
+      thumbnailUrl: f.thumbnail_name ? `/f/${f.thumbnail_name}` : null
     })),
     total,
     limit,
