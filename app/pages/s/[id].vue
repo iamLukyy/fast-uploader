@@ -83,9 +83,8 @@ function startDownload() {
 function saveAutoDownload(value: boolean) {
   localStorage.setItem('autoDownload', value.toString())
 
-  // Pokud se zapne auto-download, stáhni soubor hned
   if (value && file.value) {
-    // Stáhnout soubor bez toastu
+    // Zapnuto - stáhnout soubor hned
     const link = document.createElement('a')
     link.href = file.value.downloadUrl
     link.download = file.value.name
@@ -98,6 +97,13 @@ function saveAutoDownload(value: boolean) {
       description: 'Soubor se stahuje',
       icon: 'i-lucide-download',
       color: 'success'
+    })
+  } else if (!value) {
+    // Vypnuto
+    toast.add({
+      title: 'Automatické stahování vypnuto',
+      icon: 'i-lucide-download-off',
+      color: 'neutral'
     })
   }
 }
