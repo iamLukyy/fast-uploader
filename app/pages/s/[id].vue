@@ -171,7 +171,7 @@ onMounted(() => {
             <!-- Auto-download toggle -->
             <label class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 cursor-pointer">
               <span>Automatické stahování</span>
-              <USwitch v-model="autoDownloadEnabled" @update:model-value="saveAutoDownload" />
+              <USwitch v-model="autoDownloadEnabled" class="cursor-pointer" @update:model-value="saveAutoDownload" />
             </label>
 
             <!-- Status zpráva s animací -->
