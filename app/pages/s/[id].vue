@@ -54,11 +54,14 @@ function startDownload() {
   link.click()
   document.body.removeChild(link)
   downloadStarted.value = true
+  // Auto-hide po 3 sekundách
+  setTimeout(() => {
+    downloadStarted.value = false
+  }, 3000)
 }
 
-function toggleAutoDownload() {
-  autoDownloadEnabled.value = !autoDownloadEnabled.value
-  localStorage.setItem('autoDownload', autoDownloadEnabled.value.toString())
+function saveAutoDownload(value: boolean) {
+  localStorage.setItem('autoDownload', value.toString())
 }
 
 onMounted(() => {
@@ -166,15 +169,24 @@ onMounted(() => {
             </UButton>
 
             <!-- Auto-download toggle -->
-            <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <label class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 cursor-pointer">
               <span>Automatické stahování</span>
-              <USwitch v-model="autoDownloadEnabled" @update:model-value="toggleAutoDownload" />
-            </div>
+              <USwitch v-model="autoDownloadEnabled" @update:model-value="saveAutoDownload" />
+            </label>
 
-            <!-- Status zpráva -->
-            <p v-if="downloadStarted" class="text-sm text-green-600 dark:text-green-400">
-              Stahování zahájeno!
-            </p>
+            <!-- Status zpráva s animací -->
+            <Transition
+              enter-active-class="transition-all duration-300 ease-out"
+              enter-from-class="opacity-0 translate-y-2"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-300 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 translate-y-2"
+            >
+              <p v-if="downloadStarted" class="text-sm text-green-600 dark:text-green-400">
+                Stahování zahájeno!
+              </p>
+            </Transition>
           </div>
         </div>
       </div>
