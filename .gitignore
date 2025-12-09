@@ -29,6 +29,7 @@ data/
 
 # IDE/Editor
 .claude/
+CLAUDE.md
 
 # Local Docker overrides
 docker-compose.override.yml
