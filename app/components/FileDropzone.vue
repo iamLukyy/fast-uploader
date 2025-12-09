@@ -6,6 +6,11 @@ const emit = defineEmits<{
 const isDragOver = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
 
+// Paste preview modal
+const showPasteModal = ref(false)
+const pastedFile = ref<File | null>(null)
+const pastedPreviewUrl = ref<string | null>(null)
+
 function handleDrop(e: DragEvent) {
   isDragOver.value = false
   const files = Array.from(e.dataTransfer?.files || [])
@@ -42,26 +47,41 @@ function handlePaste(e: ClipboardEvent) {
   const items = e.clipboardData?.items
   if (!items) return
 
-  const files: File[] = []
   for (const item of items) {
     if (item.kind === 'file') {
       const file = item.getAsFile()
-      if (file) {
+      if (file && file.type.startsWith('image/')) {
         // Generate filename for pasted images (e.g. screenshots)
-        if (file.type.startsWith('image/') && file.name === 'image.png') {
+        let finalFile = file
+        if (file.name === 'image.png') {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-          const newFile = new File([file], `screenshot-${timestamp}.png`, { type: file.type })
-          files.push(newFile)
-        } else {
-          files.push(file)
+          finalFile = new File([file], `screenshot-${timestamp}.png`, { type: file.type })
         }
+
+        // Show preview modal instead of uploading directly
+        pastedFile.value = finalFile
+        pastedPreviewUrl.value = URL.createObjectURL(finalFile)
+        showPasteModal.value = true
+        return
       }
     }
   }
+}
 
-  if (files.length > 0) {
-    emit('filesSelected', files)
+function confirmPasteUpload() {
+  if (pastedFile.value) {
+    emit('filesSelected', [pastedFile.value])
   }
+  closePasteModal()
+}
+
+function closePasteModal() {
+  showPasteModal.value = false
+  if (pastedPreviewUrl.value) {
+    URL.revokeObjectURL(pastedPreviewUrl.value)
+  }
+  pastedFile.value = null
+  pastedPreviewUrl.value = null
 }
 
 onMounted(() => {
@@ -70,6 +90,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('paste', handlePaste)
+  if (pastedPreviewUrl.value) {
+    URL.revokeObjectURL(pastedPreviewUrl.value)
+  }
 })
 </script>
 
@@ -107,7 +130,52 @@ onUnmounted(() => {
       or click to browse
     </p>
     <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
-      Max 500 MB per file
+      Max 500 MB per file · Ctrl+V to paste
     </p>
   </div>
+
+  <!-- Paste preview modal -->
+  <UModal v-model:open="showPasteModal">
+    <template #content>
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <UIcon name="i-lucide-clipboard-paste" class="w-6 h-6 text-primary" />
+          <h3 class="text-lg font-semibold dark:text-white">Upload pasted image?</h3>
+        </div>
+
+        <!-- Image preview -->
+        <div v-if="pastedPreviewUrl" class="mb-4 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <img
+            :src="pastedPreviewUrl"
+            :alt="pastedFile?.name || 'Pasted image'"
+            class="max-h-64 w-full object-contain"
+          />
+        </div>
+
+        <!-- File info -->
+        <p v-if="pastedFile" class="text-sm text-gray-500 dark:text-gray-400 mb-4 truncate">
+          {{ pastedFile.name }}
+        </p>
+
+        <div class="flex gap-3 justify-end">
+          <UButton
+            color="neutral"
+            variant="soft"
+            class="cursor-pointer"
+            @click="closePasteModal"
+          >
+            Cancel
+          </UButton>
+          <UButton
+            color="primary"
+            class="cursor-pointer"
+            icon="i-lucide-upload"
+            @click="confirmPasteUpload"
+          >
+            Upload
+          </UButton>
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
