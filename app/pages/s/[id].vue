@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getFileTypeIcon } from '~/utils/fileIcons'
+
 definePageMeta({
   layout: false
 })
@@ -12,6 +14,22 @@ const isDark = computed({
 })
 
 const { data: file, error, pending } = await useFetch(`/api/public/${route.params.id}`)
+
+const fileIcon = computed(() => {
+  if (!file.value) return 'vscode-icons:default-file'
+  return getFileTypeIcon(file.value.mimeType, file.value.name)
+})
+
+function formatUploadDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 const isPreviewableImage = computed(() => {
   if (!file.value) return false
@@ -114,10 +132,20 @@ onMounted(() => {
       <!-- File display -->
       <div v-else-if="file" class="w-full max-w-2xl">
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
+          <!-- File type icon (large) - for non-previewable files -->
+          <div v-if="!isPreviewableImage" class="flex justify-center mb-4">
+            <Icon :name="fileIcon" class="w-24 h-24" />
+          </div>
+
           <!-- Filename -->
-          <h1 class="text-xl font-bold text-gray-900 dark:text-white text-center mb-6 break-all">
+          <h1 class="text-xl font-bold text-gray-900 dark:text-white text-center mb-2 break-all">
             {{ file.name }}
           </h1>
+
+          <!-- Upload date -->
+          <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+            Nahráno {{ formatUploadDate(file.uploadedAt) }}
+          </p>
 
           <!-- Image preview -->
           <div v-if="isPreviewableImage" class="mb-6 flex flex-col items-center gap-2">
@@ -130,13 +158,6 @@ onMounted(() => {
               />
             </a>
             <span class="text-xs text-gray-400 dark:text-gray-500">Click image to open full size</span>
-          </div>
-
-          <!-- Non-previewable image icon -->
-          <div v-else-if="isImageWithExif" class="flex justify-center mb-6">
-            <div class="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-              <UIcon name="i-lucide-image" class="w-12 h-12 text-gray-400" />
-            </div>
           </div>
 
           <!-- EXIF data -->

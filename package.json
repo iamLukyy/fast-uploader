@@ -23,6 +23,7 @@
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
+    "@iconify-json/vscode-icons": "^1.2.37",
     "@nuxt/eslint": "^1.10.0",
     "@types/better-sqlite3": "^7.6.13",
     "eslint": "^9.39.1",
