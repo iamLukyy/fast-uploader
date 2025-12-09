@@ -43,6 +43,7 @@ function formatSize(bytes: number): string {
 }
 
 const downloadStarted = ref(false)
+const autoDownloadEnabled = ref(false)
 
 function startDownload() {
   if (!file.value) return
@@ -55,8 +56,17 @@ function startDownload() {
   downloadStarted.value = true
 }
 
+function toggleAutoDownload() {
+  autoDownloadEnabled.value = !autoDownloadEnabled.value
+  localStorage.setItem('autoDownload', autoDownloadEnabled.value.toString())
+}
+
 onMounted(() => {
-  if (file.value && !error.value) {
+  // Načíst preference z localStorage
+  autoDownloadEnabled.value = localStorage.getItem('autoDownload') === 'true'
+
+  // Spustit download jen pokud je povoleno
+  if (autoDownloadEnabled.value && file.value && !error.value) {
     setTimeout(startDownload, 500)
   }
 })
@@ -143,21 +153,27 @@ onMounted(() => {
             {{ formatSize(file.size) }}
           </p>
 
-          <!-- Download message -->
-          <div class="text-center">
-            <p v-if="downloadStarted" class="text-gray-600 dark:text-gray-300">
-              Your file will begin downloading automatically.
-            </p>
-            <p v-else class="text-gray-600 dark:text-gray-300">
-              Your download will start shortly.
-            </p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Don't see it?
-              <a
-                :href="file.downloadUrl"
-                :download="file.name"
-                class="text-primary hover:underline cursor-pointer"
-              >Click here</a>.
+          <!-- Download section -->
+          <div class="text-center space-y-4">
+            <!-- Hlavní download tlačítko -->
+            <UButton
+              icon="i-lucide-download"
+              size="lg"
+              class="cursor-pointer"
+              @click="startDownload"
+            >
+              Stáhnout soubor
+            </UButton>
+
+            <!-- Auto-download toggle -->
+            <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <span>Automatické stahování</span>
+              <USwitch v-model="autoDownloadEnabled" @update:model-value="toggleAutoDownload" />
+            </div>
+
+            <!-- Status zpráva -->
+            <p v-if="downloadStarted" class="text-sm text-green-600 dark:text-green-400">
+              Stahování zahájeno!
             </p>
           </div>
         </div>
