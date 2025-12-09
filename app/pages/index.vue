@@ -109,6 +109,7 @@ const activeUploads = computed(() =>
           <!-- View toggle -->
           <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
             <UButton
+              v-tippy="'Grid view'"
               icon="i-lucide-grid-2x2"
               :color="viewMode === 'grid' ? 'primary' : 'neutral'"
               :variant="viewMode === 'grid' ? 'solid' : 'ghost'"
@@ -117,6 +118,7 @@ const activeUploads = computed(() =>
               @click="viewMode = 'grid'"
             />
             <UButton
+              v-tippy="'List view'"
               icon="i-lucide-list"
               :color="viewMode === 'list' ? 'primary' : 'neutral'"
               :variant="viewMode === 'list' ? 'solid' : 'ghost'"
@@ -126,6 +128,7 @@ const activeUploads = computed(() =>
             />
           </div>
           <UButton
+            v-tippy="'Refresh'"
             icon="i-lucide-refresh-cw"
             color="neutral"
             variant="ghost"

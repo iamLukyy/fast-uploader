@@ -114,39 +114,39 @@ function confirmDelete() {
     <!-- Actions -->
     <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
       <UButton
+        v-tippy="'Copy direct link'"
         :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
         :color="copiedDirect ? 'success' : 'neutral'"
         variant="ghost"
         size="xs"
-        title="Copy direct link"
         class="cursor-pointer"
         @click="copyDirectLink"
       />
       <UButton
+        v-tippy="'Copy share link'"
         :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share-2'"
         :color="copiedPage ? 'success' : 'neutral'"
         variant="ghost"
         size="xs"
-        title="Copy share link"
         class="cursor-pointer"
         @click="copyPageLink"
       />
       <UButton
+        v-tippy="'Open share page'"
         icon="i-lucide-external-link"
         color="neutral"
         variant="ghost"
         size="xs"
-        title="Open share page"
         :to="pageUrl"
         target="_blank"
         class="cursor-pointer"
       />
       <UButton
+        v-tippy="'Delete'"
         icon="i-lucide-trash-2"
         color="neutral"
         variant="ghost"
         size="xs"
-        title="Delete"
         class="cursor-pointer"
         @click="handleDelete"
       />
