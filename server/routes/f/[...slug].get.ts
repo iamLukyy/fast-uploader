@@ -1,4 +1,4 @@
-import { getFileByStoredName } from '../../utils/db'
+import { getFileByStoredName, getFileByThumbnailName } from '../../utils/db'
 import { getFileStream, fileExists } from '../../utils/storage'
 
 export default defineEventHandler(async (event) => {
@@ -19,7 +19,37 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const file = getFileByStoredName(slug)
+  // Try to find file by stored_name first
+  let file = getFileByStoredName(slug)
+  let isThumbnail = false
+
+  // If not found, try thumbnail_name
+  if (!file) {
+    file = getFileByThumbnailName(slug)
+    isThumbnail = true
+  }
+
+  // For thumbnails, serve directly from disk even if not in DB
+  if (!file && slug.startsWith('thumb_')) {
+    if (!fileExists(slug)) {
+      throw createError({
+        statusCode: 404,
+        message: 'Thumbnail not found'
+      })
+    }
+    
+    const stream = getFileStream(slug)
+    if (!stream) {
+      throw createError({
+        statusCode: 500,
+        message: 'Could not read thumbnail'
+      })
+    }
+
+    setHeader(event, 'Content-Type', 'image/jpeg')
+    setHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable')
+    return sendStream(event, stream)
+  }
 
   if (!file) {
     throw createError({
@@ -28,14 +58,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  if (!fileExists(file.stored_name)) {
+  const filename = isThumbnail ? file.thumbnail_name! : file.stored_name
+
+  if (!fileExists(filename)) {
     throw createError({
       statusCode: 404,
       message: 'File not found on storage'
     })
   }
 
-  const stream = getFileStream(file.stored_name)
+  const stream = getFileStream(filename)
 
   if (!stream) {
     throw createError({
@@ -44,10 +76,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Set headers for download
-  setHeader(event, 'Content-Type', file.mime_type)
-  setHeader(event, 'Content-Length', file.size.toString())
-  setHeader(event, 'Content-Disposition', `inline; filename="${encodeURIComponent(file.original_name)}"`)
+  // Set headers
+  if (isThumbnail) {
+    setHeader(event, 'Content-Type', 'image/jpeg')
+  } else {
+    setHeader(event, 'Content-Type', file.mime_type)
+    setHeader(event, 'Content-Length', file.size.toString())
+    setHeader(event, 'Content-Disposition', `inline; filename="${encodeURIComponent(file.original_name)}"`)
+  }
   setHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable')
 
   return sendStream(event, stream)

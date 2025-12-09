@@ -4,7 +4,7 @@ services:
     container_name: fast-uploader
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3332:3000"
     environment:
       - NODE_ENV=production
       - NUXT_SESSION_SECRET=${NUXT_SESSION_SECRET}

@@ -137,3 +137,8 @@ export function deleteFile(id: string): boolean {
 }
 
 export { db }
+
+export function getFileByThumbnailName(thumbnailName: string): FileRecord | undefined {
+  const stmt = db.prepare('SELECT * FROM files WHERE thumbnail_name = ?')
+  return stmt.get(thumbnailName) as FileRecord | undefined
+}
