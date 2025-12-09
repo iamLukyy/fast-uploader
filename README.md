@@ -50,9 +50,12 @@ Host your own. It takes 5 minutes.
 ## Features
 
 - Drag & drop upload with progress bar
+- **Ctrl+V paste** - upload screenshots directly from clipboard
 - Shareable links (direct download + share pages)
 - EXIF metadata display for photos
 - Image preview with full-size view
+- **Smart thumbnails** - auto-generated for large images
+- **Grid/List view** toggle with preference saved
 - Dark mode
 - Password protected
 - No file size limits (you control it)
@@ -145,7 +148,7 @@ Contributions welcome! Feel free to:
 
 ## Stack
 
-Nuxt 4 / Nuxt UI / Tailwind CSS / SQLite / Docker
+Nuxt 4 / Nuxt UI / Tailwind CSS / VueTippy / Sharp / SQLite / Docker
 
 ---
 
