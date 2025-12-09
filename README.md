@@ -320,16 +320,10 @@ Contributions welcome!
 
 ---
 
-## AI Assisted
-
-<p>
-  <img src="https://img.shields.io/badge/Claude-AI-cc9b7a?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI">
-</p>
-
-Code and documentation assisted by [Claude](https://claude.ai).
-
----
-
 ## License
 
 MIT - do whatever you want with it.
+
+---
+
+*README and commit messages written with Claude AI assistance.*
