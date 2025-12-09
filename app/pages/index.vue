@@ -7,6 +7,20 @@ const { files, total, loading, fetchFiles, deleteFile, addFile } = useFiles()
 const { uploads, uploadFiles, cancelUpload, removeUpload, clearCompleted, hasActiveUploads, retryUpload } = useUpload()
 const toast = useToast()
 
+// View mode (grid/list) - persisted in localStorage
+const viewMode = useState<'grid' | 'list'>('viewMode', () => 'grid')
+
+onMounted(() => {
+  const saved = localStorage.getItem('viewMode')
+  if (saved === 'grid' || saved === 'list') {
+    viewMode.value = saved
+  }
+})
+
+watch(viewMode, (val) => {
+  localStorage.setItem('viewMode', val)
+})
+
 // Fetch files on mount
 onMounted(() => {
   fetchFiles()
@@ -91,14 +105,36 @@ const activeUploads = computed(() =>
             ({{ total }})
           </span>
         </h2>
-        <UButton
-          icon="i-lucide-refresh-cw"
-          color="neutral"
-          variant="ghost"
-          size="xs"
-          :loading="loading"
-          @click="fetchFiles()"
-        />
+        <div class="flex items-center gap-1">
+          <!-- View toggle -->
+          <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
+            <UButton
+              icon="i-lucide-grid-2x2"
+              :color="viewMode === 'grid' ? 'primary' : 'neutral'"
+              :variant="viewMode === 'grid' ? 'solid' : 'ghost'"
+              size="xs"
+              class="cursor-pointer"
+              @click="viewMode = 'grid'"
+            />
+            <UButton
+              icon="i-lucide-list"
+              :color="viewMode === 'list' ? 'primary' : 'neutral'"
+              :variant="viewMode === 'list' ? 'solid' : 'ghost'"
+              size="xs"
+              class="cursor-pointer"
+              @click="viewMode = 'list'"
+            />
+          </div>
+          <UButton
+            icon="i-lucide-refresh-cw"
+            color="neutral"
+            variant="ghost"
+            size="xs"
+            :loading="loading"
+            class="cursor-pointer"
+            @click="fetchFiles()"
+          />
+        </div>
       </div>
 
       <!-- Loading -->
@@ -119,8 +155,18 @@ const activeUploads = computed(() =>
       </div>
 
       <!-- File Grid -->
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <FileCard
+          v-for="file in files"
+          :key="file.id"
+          :file="file"
+          @delete="handleDeleteFile(file.id)"
+        />
+      </div>
+
+      <!-- File List -->
+      <div v-else class="space-y-2">
+        <FileListItem
           v-for="file in files"
           :key="file.id"
           :file="file"
