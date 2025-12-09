@@ -29,6 +29,12 @@ const hasExif = computed(() => {
   return exif.make || exif.model || exif.shutterSpeed || exif.aperture || exif.iso || exif.focalLength
 })
 
+const hasGps = computed(() => {
+  if (!file.value?.exifData) return false
+  const exif = file.value.exifData
+  return typeof exif.latitude === 'number' && typeof exif.longitude === 'number'
+})
+
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
@@ -125,6 +131,13 @@ onMounted(() => {
             <ExifDisplay :exif="file.exifData" />
           </div>
 
+          <!-- Location map -->
+          <div v-if="hasGps" class="mb-6">
+            <ClientOnly>
+              <LocationMap :latitude="file.exifData.latitude" :longitude="file.exifData.longitude" />
+            </ClientOnly>
+          </div>
+
           <!-- File info -->
           <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
             {{ formatSize(file.size) }}
@@ -148,12 +161,6 @@ onMounted(() => {
             </p>
           </div>
         </div>
-
-        <!-- Branding -->
-        <p class="text-center text-sm text-gray-400 dark:text-gray-500 mt-6">
-          Uploaded with
-          <NuxtLink to="/" class="text-primary hover:underline">Fast Uploader</NuxtLink>
-        </p>
       </div>
     </main>
 

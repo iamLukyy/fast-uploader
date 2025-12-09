@@ -49,6 +49,8 @@ export interface ExifData {
   focalLength?: string
   width?: number
   height?: number
+  latitude?: number
+  longitude?: number
 }
 
 export interface FileRecord {

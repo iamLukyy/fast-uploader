@@ -39,7 +39,7 @@ export async function extractExif(storedName: string, mimeType: string): Promise
     const data = await exifr.parse(filePath, {
       tiff: true,
       exif: true,
-      gps: false,
+      gps: true,
       ifd0: true,
       translateKeys: true,
       translateValues: true,
@@ -57,6 +57,8 @@ export async function extractExif(storedName: string, mimeType: string): Promise
       focalLength: data.FocalLength ? `${Math.round(data.FocalLength)}mm` : undefined,
       width: data.ImageWidth || data.ExifImageWidth || undefined,
       height: data.ImageHeight || data.ExifImageHeight || undefined,
+      latitude: data.latitude || undefined,
+      longitude: data.longitude || undefined,
     }
   } catch {
     return null
