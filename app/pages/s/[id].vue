@@ -13,6 +13,8 @@ const isDark = computed({
   set: (v) => { colorMode.preference = v ? 'dark' : 'light' }
 })
 
+const toast = useToast()
+
 const { data: file, error, pending } = await useFetch(`/api/public/${route.params.id}`)
 
 const fileIcon = computed(() => {
@@ -60,7 +62,6 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
 }
 
-const downloadStarted = ref(false)
 const autoDownloadEnabled = ref(false)
 
 function startDownload() {
@@ -71,15 +72,34 @@ function startDownload() {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  downloadStarted.value = true
-  // Auto-hide po 3 sekundách
-  setTimeout(() => {
-    downloadStarted.value = false
-  }, 3000)
+
+  toast.add({
+    title: 'Stahování zahájeno',
+    icon: 'i-lucide-download',
+    color: 'success'
+  })
 }
 
 function saveAutoDownload(value: boolean) {
   localStorage.setItem('autoDownload', value.toString())
+
+  // Pokud se zapne auto-download, stáhni soubor hned
+  if (value && file.value) {
+    // Stáhnout soubor bez toastu
+    const link = document.createElement('a')
+    link.href = file.value.downloadUrl
+    link.download = file.value.name
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    toast.add({
+      title: 'Automatické stahování zapnuto',
+      description: 'Soubor se stahuje',
+      icon: 'i-lucide-download',
+      color: 'success'
+    })
+  }
 }
 
 onMounted(() => {
@@ -194,20 +214,6 @@ onMounted(() => {
               <span>Automatické stahování</span>
               <USwitch v-model="autoDownloadEnabled" class="cursor-pointer" @update:model-value="saveAutoDownload" />
             </label>
-
-            <!-- Status zpráva s animací -->
-            <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 translate-y-2"
-              enter-to-class="opacity-100 translate-y-0"
-              leave-active-class="transition-all duration-300 ease-in"
-              leave-from-class="opacity-100 translate-y-0"
-              leave-to-class="opacity-0 translate-y-2"
-            >
-              <p v-if="downloadStarted" class="text-sm text-green-600 dark:text-green-400">
-                Stahování zahájeno!
-              </p>
-            </Transition>
           </div>
         </div>
       </div>
