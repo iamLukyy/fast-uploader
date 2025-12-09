@@ -5,15 +5,18 @@
 <h1 align="center">FAST UPLOADER</h1>
 
 <p align="center">
-  <strong>Your own file sharing server in minutes</strong>
+  <strong>Your own file sharing server. Share with friends, no limits.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Self_Hosted-Your_Data-success?style=for-the-badge" alt="Self Hosted">
+  <img src="https://img.shields.io/badge/Raspberry_Pi-Ready-C51A4A?style=for-the-badge&logo=raspberry-pi&logoColor=white" alt="Raspberry Pi">
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Nuxt-4-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white" alt="Nuxt 4">
-  <img src="https://img.shields.io/badge/Vue-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white" alt="Vue 3">
-  <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
   <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
-  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
 <p align="center">
@@ -25,23 +28,23 @@
   </a>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/github/commit-activity/m/iamLukyy/fast-uploader?style=flat-square&label=commits" alt="Commits">
-  <img src="https://img.shields.io/github/last-commit/iamLukyy/fast-uploader?style=flat-square" alt="Last Commit">
-  <img src="https://img.shields.io/github/contributors/iamLukyy/fast-uploader?style=flat-square" alt="Contributors">
-</p>
-
 ---
 
-## Why?
+## Why Self-Host?
 
 Tired of:
-- Uploading files to random websites?
+- File size limits on every service?
 - Links expiring after 24 hours?
-- File size limits?
-- Privacy concerns?
+- Ads and upsells everywhere?
+- Not knowing where your data goes?
 
-Host your own. It takes 5 minutes.
+**Host your own uploader.** It takes 5 minutes.
+
+- **No limits** - you decide the max file size
+- **No expiration** - your files stay forever
+- **Your data** - stored on YOUR server
+- **Share freely** - send links to anyone
+- **Complete privacy** - no tracking, no analytics
 
 ---
 
@@ -55,18 +58,14 @@ Host your own. It takes 5 minutes.
 
 ## Features
 
-- Drag & drop upload with progress bar
-- **Ctrl+V paste** - upload screenshots directly from clipboard
-- Shareable links (direct download + share pages)
-- EXIF metadata display for photos
-- Image preview with full-size view
-- **Smart thumbnails** - auto-generated for large images
-- **Grid/List view** toggle with preference saved
-- Dark mode
-- Password protected
-- No file size limits (you control it)
-- No expiration (your files stay forever)
-- Self-hosted (your data, your server)
+- **Drag & drop** upload with progress bar
+- **Ctrl+V paste** - upload screenshots directly
+- **Shareable links** - direct download or share page
+- **Smart thumbnails** - auto-generated for images
+- **EXIF display** - camera info for photos
+- **Grid/List view** - toggle with saved preference
+- **Dark mode** - easy on the eyes
+- **Password protected** - only you can upload
 
 ---
 
@@ -76,85 +75,248 @@ Host your own. It takes 5 minutes.
 git clone https://github.com/iamLukyy/fast-uploader.git
 cd fast-uploader
 cp .env.example .env
-nano .env  # Set your password and secret
+nano .env  # Set your password
 docker compose up -d
 ```
 
-Done. Open `http://localhost:3000`
+Open `http://localhost:3000` - done!
 
 ---
 
-## Environment
+## Deployment Options
 
-```env
-NUXT_SESSION_SECRET=your-secret-key-min-32-chars
-NUXT_AUTH_PASSWORD=your-password
-DOMAIN=localhost
-```
+### Option A: Raspberry Pi at Home (Free)
 
----
+Perfect for personal use. Your files stay in your house.
 
-## Host It Yourself
+**Requirements:**
+- Raspberry Pi 4 or 5 (2GB+ RAM)
+- SD card or USB storage
+- Internet connection
 
-### Option 1: Raspberry Pi (free, at home)
-
-Works on Raspberry Pi 4/5 with Docker:
+**Step 1: Install Docker**
 
 ```bash
-# Install Docker on Raspberry Pi
 curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker $USER
-# Logout and login again
+```
 
-# Clone and run
+Log out and log back in.
+
+**Step 2: Run Fast Uploader**
+
+```bash
+git clone https://github.com/iamLukyy/fast-uploader.git
+cd fast-uploader
+cp .env.example .env
+nano .env  # Set NUXT_AUTH_PASSWORD
+docker compose up -d
+```
+
+**Step 3: Access locally**
+
+Find your Pi's IP:
+```bash
+hostname -I
+```
+
+Open `http://YOUR_PI_IP:3000` from any device on your network.
+
+---
+
+### Make It Public (Port Forwarding)
+
+Want to share files with friends outside your network?
+
+**1. Forward port in your router:**
+- Go to your router admin (usually `192.168.1.1`)
+- Find "Port Forwarding" settings
+- Forward external port `3000` to your Pi's local IP, port `3000`
+
+**2. Get your public IP:**
+```bash
+curl ifconfig.me
+```
+
+**3. Share with friends:**
+```
+http://YOUR_PUBLIC_IP:3000
+```
+
+**Dynamic IP? Use DuckDNS (free):**
+
+1. Create account at [duckdns.org](https://www.duckdns.org)
+2. Create a subdomain (e.g., `myuploader.duckdns.org`)
+3. Install the update script on your Pi:
+
+```bash
+mkdir -p ~/duckdns
+echo 'echo url="https://www.duckdns.org/update?domains=YOUR_SUBDOMAIN&token=YOUR_TOKEN&ip=" | curl -k -o ~/duckdns/duck.log -K -' > ~/duckdns/duck.sh
+chmod 700 ~/duckdns/duck.sh
+```
+
+4. Add to crontab (`crontab -e`):
+```
+*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
+```
+
+Now share: `http://myuploader.duckdns.org:3000`
+
+---
+
+### Option B: VPS / Cloud Server ($3-5/month)
+
+Most reliable for public access. Always online, static IP, easy HTTPS.
+
+**Recommended providers:**
+- [Hetzner Cloud](https://www.hetzner.com/cloud) - Cheapest in EU (~$4/mo)
+- [DigitalOcean](https://www.digitalocean.com) - Simple, $6/mo
+- [Contabo](https://contabo.com) - Great value
+- [Oracle Cloud Free Tier](https://www.oracle.com/cloud/free/) - Free forever (limited)
+
+**Step 1: Deploy**
+
+```bash
+ssh root@your-vps-ip
 git clone https://github.com/iamLukyy/fast-uploader.git
 cd fast-uploader
 cp .env.example .env
 nano .env
+```
+
+Set these in `.env`:
+```env
+NUXT_AUTH_PASSWORD=your-secure-password
+NUXT_SESSION_SECRET=run-openssl-rand-base64-32
+NUXT_PUBLIC_BASE_URL=https://your-domain.com
+```
+
+```bash
 docker compose up -d
 ```
 
-Want public access? Forward port 3000 in your router settings.
+**Step 2: Add HTTPS with Caddy (easiest)**
 
-### Option 2: VPS ($3-5/month)
+```bash
+apt update && apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+apt update && apt install caddy
+```
 
-Any cheap VPS works (Hetzner, DigitalOcean, Contabo...):
+Edit `/etc/caddy/Caddyfile`:
+```
+your-domain.com {
+    reverse_proxy localhost:3000
+}
+```
+
+```bash
+systemctl restart caddy
+```
+
+Caddy automatically gets SSL certificates from Let's Encrypt!
+
+**Alternative: Use included Traefik config**
+
+```bash
+# Create Traefik network first
+docker network create traefik
+
+# Edit docker-compose.traefik.yml with your domain
+docker compose -f docker-compose.traefik.yml up -d
+```
+
+---
+
+### Option C: Local Network Only
+
+For home or office use without internet access.
 
 ```bash
 git clone https://github.com/iamLukyy/fast-uploader.git
 cd fast-uploader
 cp .env.example .env
-nano .env  # Set DOMAIN=your-domain.com
+nano .env  # Set password
 docker compose up -d
 ```
 
-Add a reverse proxy (nginx, Traefik, Caddy) for HTTPS.
-
-### Option 3: Without Docker
-
-```bash
-# Requires Node.js 20+ and pnpm
-pnpm install
-pnpm build
-node .output/server/index.mjs
+Access from any device on the same network:
 ```
+http://192.168.1.XXX:3000
+```
+
+Share files with family/coworkers without exposing anything to the internet.
 
 ---
 
-## Contributing
+## Configuration
 
-Contributions welcome! Feel free to:
+Create `.env` from the example:
+```bash
+cp .env.example .env
+```
 
-- Open issues for bugs or feature requests
-- Submit pull requests
-- Improve documentation
-- Share the project
+**Required settings:**
+
+| Variable | Description |
+|----------|-------------|
+| `NUXT_AUTH_PASSWORD` | Your login password |
+| `NUXT_SESSION_SECRET` | Random string, min 32 chars |
+
+Generate a secret:
+```bash
+openssl rand -base64 32
+```
+
+**Optional settings:**
+
+| Variable | Description |
+|----------|-------------|
+| `NUXT_PUBLIC_BASE_URL` | Your public URL (for share links) |
+| `DOMAIN` | Domain for Traefik setup |
+
+---
+
+## Storage & Backups
+
+**Where files are stored:**
+```
+./data/
+├── uploads/          # Your uploaded files
+└── database.sqlite   # File metadata
+```
+
+**Backup everything:**
+```bash
+cp -r ./data ./backup-$(date +%Y%m%d)
+```
+
+**Restore:**
+```bash
+cp -r ./backup-YYYYMMDD/* ./data/
+```
+
+**Default limits:**
+- Max file size: 500MB (configurable in code)
+- Storage: Limited only by your disk space
 
 ---
 
 ## Stack
 
-Nuxt 4 / Nuxt UI / Tailwind CSS / Sharp / SQLite / Docker
+Built with: **Nuxt 4** / **Vue 3** / **Tailwind CSS** / **SQLite** / **Sharp** / **Docker**
+
+---
+
+## Contributing
+
+Contributions welcome!
+
+- Open issues for bugs or feature requests
+- Submit pull requests
+- Improve documentation
+- Star the repo if you like it
 
 ---
 
@@ -164,7 +326,7 @@ Nuxt 4 / Nuxt UI / Tailwind CSS / Sharp / SQLite / Docker
   <img src="https://img.shields.io/badge/Claude-AI-cc9b7a?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI">
 </p>
 
-Commit messages and code comments were generated with [Claude](https://claude.ai).
+Code and documentation assisted by [Claude](https://claude.ai).
 
 ---
 
