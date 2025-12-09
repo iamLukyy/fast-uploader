@@ -154,7 +154,17 @@ Contributions welcome! Feel free to:
 
 ## Stack
 
-Nuxt 4 / Nuxt UI / Tailwind CSS / VueTippy / Sharp / SQLite / Docker
+Nuxt 4 / Nuxt UI / Tailwind CSS / Sharp / SQLite / Docker
+
+---
+
+## AI Assisted
+
+<p>
+  <img src="https://img.shields.io/badge/Claude-AI-cc9b7a?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI">
+</p>
+
+Commit messages and code comments were generated with [Claude](https://claude.ai).
 
 ---
 
