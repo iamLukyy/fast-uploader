@@ -94,15 +94,14 @@ function saveAutoDownload(value: boolean) {
 
     toast.add({
       title: 'Automatické stahování zapnuto',
-      description: 'Soubor se stahuje',
-      icon: 'i-lucide-download',
+      icon: 'i-lucide-toggle-right',
       color: 'success'
     })
   } else if (!value) {
     // Vypnuto
     toast.add({
       title: 'Automatické stahování vypnuto',
-      icon: 'i-lucide-download-off',
+      icon: 'i-lucide-toggle-left',
       color: 'neutral'
     })
   }
