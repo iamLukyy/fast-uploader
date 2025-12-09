@@ -33,3 +33,6 @@ CLAUDE.md
 
 # Local Docker overrides
 docker-compose.override.yml
+
+# pnpm store
+.pnpm-store/

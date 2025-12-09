@@ -116,43 +116,47 @@ function confirmDelete() {
     </div>
 
     <div class="flex gap-1.5 mt-3">
-      <UButton
-        v-tippy="'Copy direct link'"
-        :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
-        :color="copiedDirect ? 'success' : 'neutral'"
-        variant="soft"
-        size="xs"
-        class="cursor-pointer"
-        @click="copyDirectLink"
-      />
-      <UButton
-        v-tippy="'Copy share link'"
-        :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share-2'"
-        :color="copiedPage ? 'success' : 'neutral'"
-        variant="soft"
-        size="xs"
-        class="cursor-pointer"
-        @click="copyPageLink"
-      />
-      <UButton
-        v-tippy="'Open share page'"
-        icon="i-lucide-external-link"
-        color="neutral"
-        variant="soft"
-        size="xs"
-        :to="pageUrl"
-        target="_blank"
-        class="cursor-pointer"
-      />
-      <UButton
-        v-tippy="'Delete'"
-        icon="i-lucide-trash-2"
-        color="neutral"
-        variant="soft"
-        size="xs"
-        class="cursor-pointer"
-        @click="handleDelete"
-      />
+      <UTooltip :delay-duration="0" text="Copy direct link">
+        <UButton
+          :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
+          :color="copiedDirect ? 'success' : 'neutral'"
+          variant="soft"
+          size="xs"
+          class="cursor-pointer"
+          @click="copyDirectLink"
+        />
+      </UTooltip>
+      <UTooltip :delay-duration="0" text="Copy share link">
+        <UButton
+          :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share-2'"
+          :color="copiedPage ? 'success' : 'neutral'"
+          variant="soft"
+          size="xs"
+          class="cursor-pointer"
+          @click="copyPageLink"
+        />
+      </UTooltip>
+      <UTooltip :delay-duration="0" text="Open share page">
+        <UButton
+          icon="i-lucide-external-link"
+          color="neutral"
+          variant="soft"
+          size="xs"
+          :to="pageUrl"
+          target="_blank"
+          class="cursor-pointer"
+        />
+      </UTooltip>
+      <UTooltip :delay-duration="0" text="Delete">
+        <UButton
+          icon="i-lucide-trash-2"
+          color="neutral"
+          variant="soft"
+          size="xs"
+          class="cursor-pointer"
+          @click="handleDelete"
+        />
+      </UTooltip>
     </div>
 
     <!-- Delete confirmation modal -->

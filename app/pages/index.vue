@@ -108,35 +108,38 @@ const activeUploads = computed(() =>
         <div class="flex items-center gap-1">
           <!-- View toggle -->
           <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
-            <UButton
-              v-tippy="'Grid view'"
-              icon="i-lucide-grid-2x2"
-              :color="viewMode === 'grid' ? 'primary' : 'neutral'"
-              :variant="viewMode === 'grid' ? 'solid' : 'ghost'"
-              size="xs"
-              class="cursor-pointer"
-              @click="viewMode = 'grid'"
-            />
-            <UButton
-              v-tippy="'List view'"
-              icon="i-lucide-list"
-              :color="viewMode === 'list' ? 'primary' : 'neutral'"
-              :variant="viewMode === 'list' ? 'solid' : 'ghost'"
-              size="xs"
-              class="cursor-pointer"
-              @click="viewMode = 'list'"
-            />
+            <UTooltip :delay-duration="0" text="Grid view">
+              <UButton
+                icon="i-lucide-grid-2x2"
+                :color="viewMode === 'grid' ? 'primary' : 'neutral'"
+                :variant="viewMode === 'grid' ? 'solid' : 'ghost'"
+                size="xs"
+                class="cursor-pointer"
+                @click="viewMode = 'grid'"
+              />
+            </UTooltip>
+            <UTooltip :delay-duration="0" text="List view">
+              <UButton
+                icon="i-lucide-list"
+                :color="viewMode === 'list' ? 'primary' : 'neutral'"
+                :variant="viewMode === 'list' ? 'solid' : 'ghost'"
+                size="xs"
+                class="cursor-pointer"
+                @click="viewMode = 'list'"
+              />
+            </UTooltip>
           </div>
-          <UButton
-            v-tippy="'Refresh'"
-            icon="i-lucide-refresh-cw"
-            color="neutral"
-            variant="ghost"
-            size="xs"
-            :loading="loading"
-            class="cursor-pointer"
-            @click="fetchFiles()"
-          />
+          <UTooltip :delay-duration="0" text="Refresh">
+            <UButton
+              icon="i-lucide-refresh-cw"
+              color="neutral"
+              variant="ghost"
+              size="xs"
+              :loading="loading"
+              class="cursor-pointer"
+              @click="fetchFiles()"
+            />
+          </UTooltip>
         </div>
       </div>
 
