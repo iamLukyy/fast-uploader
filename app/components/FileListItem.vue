@@ -31,17 +31,37 @@ const thumbnailSrc = computed(() => props.file.thumbnailUrl || fileUrl.value)
 
 const showDeleteModal = ref(false)
 const copiedDirect = ref(false)
+const copiedPage = ref(false)
 
 async function copyDirectLink() {
   try {
     await navigator.clipboard.writeText(fileUrl.value)
     copiedDirect.value = true
     toast.add({
-      title: 'Link copied!',
+      title: 'Direct link copied!',
       icon: 'i-lucide-check',
       color: 'success'
     })
     setTimeout(() => { copiedDirect.value = false }, 3000)
+  } catch {
+    toast.add({
+      title: 'Failed to copy',
+      icon: 'i-lucide-x',
+      color: 'error'
+    })
+  }
+}
+
+async function copyPageLink() {
+  try {
+    await navigator.clipboard.writeText(pageUrl.value)
+    copiedPage.value = true
+    toast.add({
+      title: 'Share link copied!',
+      icon: 'i-lucide-check',
+      color: 'success'
+    })
+    setTimeout(() => { copiedPage.value = false }, 3000)
   } catch {
     toast.add({
       title: 'Failed to copy',
@@ -98,14 +118,25 @@ function confirmDelete() {
         :color="copiedDirect ? 'success' : 'neutral'"
         variant="ghost"
         size="xs"
+        title="Copy direct link"
         class="cursor-pointer"
         @click="copyDirectLink"
+      />
+      <UButton
+        :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share-2'"
+        :color="copiedPage ? 'success' : 'neutral'"
+        variant="ghost"
+        size="xs"
+        title="Copy share link"
+        class="cursor-pointer"
+        @click="copyPageLink"
       />
       <UButton
         icon="i-lucide-external-link"
         color="neutral"
         variant="ghost"
         size="xs"
+        title="Open share page"
         :to="pageUrl"
         target="_blank"
         class="cursor-pointer"
@@ -115,6 +146,7 @@ function confirmDelete() {
         color="neutral"
         variant="ghost"
         size="xs"
+        title="Delete"
         class="cursor-pointer"
         @click="handleDelete"
       />

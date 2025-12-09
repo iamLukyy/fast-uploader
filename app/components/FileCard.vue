@@ -115,48 +115,41 @@ function confirmDelete() {
       </div>
     </div>
 
-    <div class="flex gap-2 mt-3">
-      <!-- Copy Direct Link -->
+    <div class="flex gap-1.5 mt-3">
       <UButton
         :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
         :color="copiedDirect ? 'success' : 'neutral'"
         variant="soft"
         size="xs"
-        class="cursor-pointer flex-1"
+        title="Copy direct link"
+        class="cursor-pointer"
         @click="copyDirectLink"
-      >
-        {{ copiedDirect ? 'Copied!' : 'Direct' }}
-      </UButton>
-
-      <!-- Copy Page Link -->
+      />
       <UButton
-        :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share'"
-        :color="copiedPage ? 'success' : 'primary'"
+        :icon="copiedPage ? 'i-lucide-check' : 'i-lucide-share-2'"
+        :color="copiedPage ? 'success' : 'neutral'"
         variant="soft"
         size="xs"
-        class="cursor-pointer flex-1"
+        title="Copy share link"
+        class="cursor-pointer"
         @click="copyPageLink"
-      >
-        {{ copiedPage ? 'Copied!' : 'Share' }}
-      </UButton>
-
-      <!-- Open -->
+      />
       <UButton
         icon="i-lucide-external-link"
         color="neutral"
         variant="soft"
         size="xs"
+        title="Open share page"
         :to="pageUrl"
         target="_blank"
         class="cursor-pointer"
       />
-
-      <!-- Delete -->
       <UButton
         icon="i-lucide-trash-2"
         color="neutral"
         variant="soft"
         size="xs"
+        title="Delete"
         class="cursor-pointer"
         @click="handleDelete"
       />
