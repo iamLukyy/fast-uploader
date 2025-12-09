@@ -119,44 +119,47 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
-    <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <NuxtLink to="/" class="flex items-center gap-2">
-          <UIcon name="i-lucide-upload-cloud" class="w-6 h-6 text-primary" />
-          <span class="font-bold">Fast Uploader</span>
+  <div class="min-h-screen bg-gradient-subtle flex flex-col transition-colors duration-300">
+    <!-- Glass header -->
+    <header class="glass border-b border-gray-200/50 dark:border-gray-700/50">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <NuxtLink to="/" class="flex items-center gap-3">
+          <div class="p-2 rounded-xl bg-primary/10 dark:bg-primary/20 glow-primary">
+            <UIcon name="i-lucide-upload-cloud" class="w-5 h-5 text-primary" />
+          </div>
+          <span class="font-bold text-lg">Fast Uploader</span>
         </NuxtLink>
 
         <UButton
           :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
           color="neutral"
           variant="ghost"
-          class="cursor-pointer"
+          size="sm"
+          class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
           @click="isDark = !isDark"
         />
       </div>
     </header>
 
     <!-- Content -->
-    <main class="flex-1 flex items-center justify-center px-4 py-12">
+    <main class="flex-1 flex items-center justify-center px-6 py-12">
       <!-- Loading state -->
       <div v-if="pending" class="w-full max-w-2xl">
-        <USkeleton class="h-64 rounded-xl" />
+        <USkeleton class="h-64 rounded-2xl" />
       </div>
 
       <!-- Error state -->
       <div v-else-if="error" class="text-center">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
-          <UIcon name="i-lucide-file-x" class="w-8 h-8 text-red-500" />
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-red-100 dark:bg-red-900/20 mb-6">
+          <UIcon name="i-lucide-file-x" class="w-10 h-10 text-red-500" />
         </div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">File not found</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">File not found</h1>
         <p class="text-gray-500 dark:text-gray-400">This file may have been deleted or the link is invalid.</p>
       </div>
 
       <!-- File display -->
       <div v-else-if="file" class="w-full max-w-2xl">
-        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm">
+        <div class="bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-8 shadow-elevated">
           <!-- File type icon (large) - for non-previewable files -->
           <div v-if="!isPreviewableImage" class="flex justify-center mb-4">
             <Icon :name="fileIcon" class="w-24 h-24" />
@@ -173,13 +176,13 @@ onMounted(() => {
           </p>
 
           <!-- Image preview -->
-          <div v-if="isPreviewableImage" class="mb-6 flex flex-col items-center gap-2">
+          <div v-if="isPreviewableImage" class="mb-6 flex flex-col items-center gap-3">
             <a :href="file.downloadUrl" target="_blank" class="block cursor-pointer group">
               <img
                 :src="file.downloadUrl"
                 :alt="file.name"
                 loading="lazy"
-                class="max-w-full max-h-96 rounded-lg shadow-md group-hover:shadow-xl group-hover:scale-[1.02] transition-all duration-200"
+                class="max-w-full max-h-96 rounded-xl shadow-elevated group-hover:shadow-float group-hover:scale-[1.01] transition-all duration-300 ring-1 ring-gray-200/50 dark:ring-gray-700/50"
               />
             </a>
             <span class="text-xs text-gray-400 dark:text-gray-500">Click image to open full size</span>
@@ -208,7 +211,7 @@ onMounted(() => {
             <UButton
               icon="i-lucide-download"
               size="lg"
-              class="cursor-pointer"
+              class="cursor-pointer active:scale-95 transition-transform glow-primary"
               @click="startDownload"
             >
               Stáhnout soubor
@@ -224,15 +227,15 @@ onMounted(() => {
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-center">
-        <span class="text-sm text-gray-500 dark:text-gray-400">
+    <!-- Minimal footer -->
+    <footer class="border-t border-gray-200/50 dark:border-gray-700/50">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-center">
+        <span class="text-sm text-gray-400 dark:text-gray-500">
           Vibecoded by
           <a
             href="https://github.com/iamLukyy"
             target="_blank"
-            class="text-primary hover:underline"
+            class="text-primary hover:text-primary/80 transition-colors"
           >Luky</a>
         </span>
       </div>

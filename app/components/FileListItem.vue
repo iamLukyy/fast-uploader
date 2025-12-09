@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FileItem } from '~/composables/useFiles'
-import { getFileIcon } from '~/utils/fileIcons'
+import { getFileTypeIcon } from '~/utils/fileIcons'
 
 const props = defineProps<{
   file: FileItem
@@ -15,7 +15,7 @@ const toast = useToast()
 
 const fileUrl = computed(() => getPublicUrl(props.file))
 const pageUrl = computed(() => getPageUrl(props.file))
-const fileIcon = computed(() => getFileIcon(props.file.mimeType, props.file.name))
+const fileIcon = computed(() => getFileTypeIcon(props.file.mimeType, props.file.name))
 
 const formattedDate = computed(() => {
   return new Date(props.file.uploadedAt).toLocaleString('cs-CZ', {
@@ -82,13 +82,13 @@ function confirmDelete() {
 </script>
 
 <template>
-  <div class="group flex items-center gap-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-2 hover:shadow-sm transition-shadow">
-    <!-- Thumbnail/Icon -->
-    <div v-if="isImage" class="w-8 h-8 rounded overflow-hidden flex-shrink-0">
+  <div class="group flex items-center gap-4 bg-white dark:bg-gray-800/30 rounded-xl border border-gray-200/60 dark:border-gray-700/40 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/60 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200">
+    <!-- Thumbnail/VSCode Icon -->
+    <div v-if="isImage" class="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-gray-200/50 dark:ring-gray-700/50">
       <img :src="thumbnailSrc" :alt="file.name" class="w-full h-full object-cover" loading="lazy" />
     </div>
-    <div v-else class="w-8 h-8 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-      <UIcon :name="fileIcon" class="w-4 h-4 text-gray-500" />
+    <div v-else class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center flex-shrink-0">
+      <Icon :name="fileIcon" class="w-5 h-5" />
     </div>
 
     <!-- File info -->
@@ -96,7 +96,7 @@ function confirmDelete() {
       <a
         :href="fileUrl"
         target="_blank"
-        class="text-sm font-medium truncate block hover:text-primary transition-colors"
+        class="text-sm font-medium truncate block hover:text-primary transition-colors duration-150"
         :title="file.name"
       >
         {{ file.name }}
@@ -104,22 +104,22 @@ function confirmDelete() {
     </div>
 
     <!-- Size & Date -->
-    <div class="hidden sm:block text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+    <div class="hidden sm:block text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">
       {{ formatSize(file.size) }}
     </div>
-    <div class="hidden md:block text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+    <div class="hidden md:block text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">
       {{ formattedDate }}
     </div>
 
     <!-- Actions -->
-    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
       <UTooltip :delay-duration="0" text="Copy direct link">
         <UButton
           :icon="copiedDirect ? 'i-lucide-check' : 'i-lucide-link'"
           :color="copiedDirect ? 'success' : 'neutral'"
           variant="ghost"
           size="xs"
-          class="cursor-pointer"
+          class="cursor-pointer active:scale-95 transition-transform"
           @click="copyDirectLink"
         />
       </UTooltip>
@@ -129,7 +129,7 @@ function confirmDelete() {
           :color="copiedPage ? 'success' : 'neutral'"
           variant="ghost"
           size="xs"
-          class="cursor-pointer"
+          class="cursor-pointer active:scale-95 transition-transform"
           @click="copyPageLink"
         />
       </UTooltip>
@@ -141,7 +141,7 @@ function confirmDelete() {
           size="xs"
           :to="pageUrl"
           target="_blank"
-          class="cursor-pointer"
+          class="cursor-pointer active:scale-95 transition-transform"
         />
       </UTooltip>
       <UTooltip :delay-duration="0" text="Delete">
@@ -150,7 +150,7 @@ function confirmDelete() {
           color="neutral"
           variant="ghost"
           size="xs"
-          class="cursor-pointer"
+          class="cursor-pointer active:scale-95 transition-transform"
           @click="handleDelete"
         />
       </UTooltip>
@@ -159,13 +159,15 @@ function confirmDelete() {
     <!-- Delete confirmation modal -->
     <UModal v-model:open="showDeleteModal">
       <template #content>
-        <div class="p-6 text-center">
-          <UIcon name="i-lucide-alert-triangle" class="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 class="text-lg font-semibold mb-2 dark:text-white">Delete file?</h3>
-          <p class="text-gray-500 dark:text-gray-400 mb-6 break-all">{{ file.name }}</p>
+        <div class="p-8 text-center">
+          <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mx-auto mb-6 flex items-center justify-center">
+            <UIcon name="i-lucide-alert-triangle" class="w-8 h-8 text-red-500" />
+          </div>
+          <h3 class="text-xl font-semibold mb-2 dark:text-white">Delete file?</h3>
+          <p class="text-gray-500 dark:text-gray-400 mb-8 break-all text-sm">{{ file.name }}</p>
           <div class="flex gap-3 justify-center">
-            <UButton color="neutral" variant="soft" class="cursor-pointer" @click="showDeleteModal = false">Cancel</UButton>
-            <UButton color="error" class="cursor-pointer" @click="confirmDelete">Delete</UButton>
+            <UButton color="neutral" variant="soft" class="cursor-pointer active:scale-95 transition-transform px-6" @click="showDeleteModal = false">Cancel</UButton>
+            <UButton color="error" class="cursor-pointer active:scale-95 transition-transform px-6" @click="confirmDelete">Delete</UButton>
           </div>
         </div>
       </template>

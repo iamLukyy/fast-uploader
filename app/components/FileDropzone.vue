@@ -98,11 +98,11 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200"
+    class="relative border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300"
     :class="[
       isDragOver
-        ? 'border-primary bg-primary/5 scale-[1.02] shadow-md'
-        : 'border-gray-300 dark:border-gray-600 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md'
+        ? 'border-primary bg-primary/5 dark:bg-primary/10 scale-[1.01] shadow-elevated ring-2 ring-primary/20'
+        : 'border-gray-300 dark:border-gray-600 hover:border-primary/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 hover:shadow-subtle'
     ]"
     @drop.prevent="handleDrop"
     @dragover="handleDragOver"
@@ -117,19 +117,25 @@ onUnmounted(() => {
       @change="handleFileSelect"
     />
 
-    <UIcon
-      name="i-lucide-upload-cloud"
-      class="w-12 h-12 mx-auto mb-4 transition-transform"
-      :class="isDragOver ? 'text-primary scale-110' : 'text-gray-400'"
-    />
+    <!-- Icon with glow container -->
+    <div
+      class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6 transition-all duration-300"
+      :class="isDragOver ? 'bg-primary/10 glow-primary' : 'bg-gray-100 dark:bg-gray-800'"
+    >
+      <UIcon
+        name="i-lucide-upload-cloud"
+        class="w-8 h-8 transition-all duration-300"
+        :class="isDragOver ? 'text-primary scale-110' : 'text-gray-400'"
+      />
+    </div>
 
-    <p class="text-lg font-medium mb-1">
+    <p class="text-lg font-semibold mb-2">
       {{ isDragOver ? 'Drop files here' : 'Drag & drop files' }}
     </p>
     <p class="text-sm text-gray-500 dark:text-gray-400">
-      or click to browse
+      or <span class="text-primary font-medium">click to browse</span>
     </p>
-    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
       Max 500 MB per file · Ctrl+V to paste
     </p>
   </div>
@@ -137,23 +143,25 @@ onUnmounted(() => {
   <!-- Paste preview modal -->
   <UModal v-model:open="showPasteModal">
     <template #content>
-      <div class="p-6">
-        <div class="flex items-center gap-3 mb-4">
-          <UIcon name="i-lucide-clipboard-paste" class="w-6 h-6 text-primary" />
+      <div class="p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="p-2.5 rounded-xl bg-primary/10 dark:bg-primary/20">
+            <UIcon name="i-lucide-clipboard-paste" class="w-5 h-5 text-primary" />
+          </div>
           <h3 class="text-lg font-semibold dark:text-white">Upload pasted image?</h3>
         </div>
 
         <!-- Image preview -->
-        <div v-if="pastedPreviewUrl" class="mb-4 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <div v-if="pastedPreviewUrl" class="mb-6 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 ring-1 ring-gray-200/50 dark:ring-gray-700/50">
           <img
             :src="pastedPreviewUrl"
             :alt="pastedFile?.name || 'Pasted image'"
-            class="max-h-64 w-full object-contain"
+            class="max-h-72 w-full object-contain"
           />
         </div>
 
         <!-- File info -->
-        <p v-if="pastedFile" class="text-sm text-gray-500 dark:text-gray-400 mb-4 truncate">
+        <p v-if="pastedFile" class="text-sm text-gray-500 dark:text-gray-400 mb-6 truncate">
           {{ pastedFile.name }}
         </p>
 
@@ -161,14 +169,14 @@ onUnmounted(() => {
           <UButton
             color="neutral"
             variant="soft"
-            class="cursor-pointer"
+            class="cursor-pointer active:scale-95 transition-transform"
             @click="closePasteModal"
           >
             Cancel
           </UButton>
           <UButton
             color="primary"
-            class="cursor-pointer"
+            class="cursor-pointer active:scale-95 transition-transform"
             icon="i-lucide-upload"
             @click="confirmPasteUpload"
           >

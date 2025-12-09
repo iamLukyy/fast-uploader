@@ -14,45 +14,52 @@ async function handleLogout() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <UIcon name="i-lucide-upload-cloud" class="w-6 h-6 text-primary" />
-          <span class="font-bold">Fast Uploader</span>
+  <div class="min-h-screen bg-gradient-subtle flex flex-col transition-colors duration-300">
+    <!-- Sticky glass header -->
+    <header class="sticky top-0 z-50 glass border-b border-gray-200/50 dark:border-gray-700/50">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <!-- Logo with glow effect -->
+          <div class="p-2 rounded-xl bg-primary/10 dark:bg-primary/20 glow-primary">
+            <UIcon name="i-lucide-upload-cloud" class="w-5 h-5 text-primary" />
+          </div>
+          <span class="font-bold text-lg">Fast Uploader</span>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
           <UButton
             :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
             color="neutral"
             variant="ghost"
-            class="cursor-pointer"
+            size="sm"
+            class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
             @click="isDark = !isDark"
           />
           <UButton
             icon="i-lucide-log-out"
             color="neutral"
             variant="ghost"
-            class="cursor-pointer"
+            size="sm"
+            class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
             @click="handleLogout"
           />
         </div>
       </div>
     </header>
 
-    <main class="flex-1 max-w-5xl mx-auto px-4 py-6 w-full">
+    <main class="flex-1 max-w-5xl mx-auto px-6 py-8 w-full">
       <slot />
     </main>
 
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-center">
-        <span class="text-sm text-gray-500 dark:text-gray-400">
+    <!-- Minimal footer -->
+    <footer class="border-t border-gray-200/50 dark:border-gray-700/50">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-center">
+        <span class="text-sm text-gray-400 dark:text-gray-500">
           Vibecoded by
           <a
             href="https://github.com/iamLukyy"
             target="_blank"
-            class="text-primary hover:underline"
+            class="text-primary hover:text-primary/80 transition-colors"
           >Luky</a>
         </span>
       </div>

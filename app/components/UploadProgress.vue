@@ -33,35 +33,59 @@ const statusIcon = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-    <UIcon
-      :name="statusIcon"
-      class="w-5 h-5 flex-shrink-0"
+  <div
+    class="flex items-center gap-4 p-4 rounded-xl border transition-all duration-300"
+    :class="[
+      upload.status === 'complete' && 'bg-green-50/50 dark:bg-green-900/10 border-green-200/50 dark:border-green-800/30',
+      upload.status === 'error' && 'bg-red-50/50 dark:bg-red-900/10 border-red-200/50 dark:border-red-800/30',
+      upload.status === 'uploading' && 'bg-gray-50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/30',
+      upload.status === 'pending' && 'bg-gray-50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/30'
+    ]"
+  >
+    <!-- Status icon with container -->
+    <div
+      class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
       :class="[
-        upload.status === 'uploading' && 'animate-spin',
-        statusColor === 'success' && 'text-green-500 dark:text-green-400',
-        statusColor === 'error' && 'text-red-500 dark:text-red-400',
-        statusColor === 'primary' && 'text-primary',
-        statusColor === 'neutral' && 'text-gray-400'
+        upload.status === 'complete' && 'bg-green-100 dark:bg-green-900/30',
+        upload.status === 'error' && 'bg-red-100 dark:bg-red-900/30',
+        upload.status === 'uploading' && 'bg-primary/10',
+        upload.status === 'pending' && 'bg-gray-100 dark:bg-gray-700'
       ]"
-    />
+    >
+      <UIcon
+        :name="statusIcon"
+        class="w-5 h-5"
+        :class="[
+          upload.status === 'uploading' && 'animate-spin text-primary',
+          upload.status === 'complete' && 'text-green-500',
+          upload.status === 'error' && 'text-red-500',
+          upload.status === 'pending' && 'text-gray-400'
+        ]"
+      />
+    </div>
 
     <div class="flex-1 min-w-0">
       <p class="text-sm font-medium truncate dark:text-white">{{ upload.file.name }}</p>
-      <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+      <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
         <span>{{ formatSize(upload.file.size) }}</span>
-        <span v-if="upload.status === 'uploading'">{{ upload.progress }}%</span>
-        <span v-else-if="upload.status === 'error'" class="text-red-500 dark:text-red-400">
+        <span v-if="upload.status === 'uploading'" class="text-primary font-medium">
+          {{ upload.progress }}%
+        </span>
+        <span v-else-if="upload.status === 'error'" class="text-red-500">
           {{ upload.error }}
         </span>
       </div>
 
-      <UProgress
+      <!-- Custom gradient progress bar -->
+      <div
         v-if="upload.status === 'uploading' || upload.status === 'pending'"
-        :value="upload.progress"
-        size="xs"
-        class="mt-1"
-      />
+        class="mt-2 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+      >
+        <div
+          class="h-full bg-gradient-to-r from-primary to-green-400 rounded-full transition-all duration-300"
+          :style="{ width: `${upload.progress}%` }"
+        />
+      </div>
     </div>
 
     <!-- Retry button for failed uploads -->
@@ -71,7 +95,7 @@ const statusIcon = computed(() => {
       color="error"
       variant="soft"
       size="xs"
-      class="cursor-pointer"
+      class="cursor-pointer active:scale-95 transition-transform"
       @click="emit('retry')"
     />
 
@@ -81,7 +105,7 @@ const statusIcon = computed(() => {
       color="neutral"
       variant="ghost"
       size="xs"
-      class="cursor-pointer"
+      class="cursor-pointer active:scale-95 transition-transform"
       @click="emit('cancel')"
     />
     <UButton
@@ -90,7 +114,7 @@ const statusIcon = computed(() => {
       color="neutral"
       variant="ghost"
       size="xs"
-      class="cursor-pointer"
+      class="cursor-pointer active:scale-95 transition-transform"
       @click="emit('remove')"
     />
   </div>
