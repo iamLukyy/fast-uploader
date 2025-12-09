@@ -25,6 +25,12 @@
   </a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/github/commit-activity/m/iamLukyy/fast-uploader?style=flat-square&label=commits" alt="Commits">
+  <img src="https://img.shields.io/github/last-commit/iamLukyy/fast-uploader?style=flat-square" alt="Last Commit">
+  <img src="https://img.shields.io/github/contributors/iamLukyy/fast-uploader?style=flat-square" alt="Contributors">
+</p>
+
 ---
 
 ## Why?
