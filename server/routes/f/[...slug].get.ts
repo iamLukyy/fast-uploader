@@ -2,7 +2,13 @@ import { getFileByStoredName, getFileByThumbnailName } from '../../utils/db'
 import { getFileStream, fileExists } from '../../utils/storage'
 
 export default defineEventHandler(async (event) => {
-  const slug = getRouterParam(event, 'slug')
+  const slugParam = getRouterParam(event, 'slug')
+  
+  // Debug log
+  console.log('Route /f/ called, slug param:', slugParam, 'type:', typeof slugParam)
+  
+  // Handle array or string
+  const slug = Array.isArray(slugParam) ? slugParam.join('/') : slugParam
 
   if (!slug) {
     throw createError({
@@ -12,7 +18,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Security: prevent path traversal
-  if (slug.includes('..') || slug.includes('/') || slug.includes('\\')) {
+  if (slug.includes('..')) {
     throw createError({
       statusCode: 400,
       message: 'Invalid filename'
@@ -34,7 +40,7 @@ export default defineEventHandler(async (event) => {
     if (!fileExists(slug)) {
       throw createError({
         statusCode: 404,
-        message: 'Thumbnail not found'
+        message: 'Thumbnail not found on disk'
       })
     }
     
@@ -54,7 +60,7 @@ export default defineEventHandler(async (event) => {
   if (!file) {
     throw createError({
       statusCode: 404,
-      message: 'File not found'
+      message: 'File not found in database'
     })
   }
 
