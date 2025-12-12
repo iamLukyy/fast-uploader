@@ -4,15 +4,15 @@ useHead({
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
   ],
   link: [
-    { rel: 'icon', href: '/favicon.ico' }
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
   ],
   htmlAttrs: {
     lang: 'en'
   }
 })
 
-const title = 'Fast Uploader'
-const description = 'Simple and fast file upload service'
+const title = 'Drop'
+const description = 'Simple file sharing'
 
 useSeoMeta({
   title,

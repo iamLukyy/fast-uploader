@@ -1,31 +1,22 @@
 <p align="center">
-  <img src="https://nuxt.com/assets/design-kit/icon-green.svg" width="80" alt="Nuxt">
+  <img src="https://api.iconify.design/lucide:arrow-down-to-line.svg?color=%23888" width="80" alt="Drop">
 </p>
 
-<h1 align="center">FAST UPLOADER</h1>
+<h1 align="center">DROP</h1>
 
 <p align="center">
   <strong>Your own file sharing server. Share with friends, no limits.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Self_Hosted-Your_Data-success?style=for-the-badge" alt="Self Hosted">
-  <img src="https://img.shields.io/badge/Raspberry_Pi-Ready-C51A4A?style=for-the-badge&logo=raspberry-pi&logoColor=white" alt="Raspberry Pi">
-  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Self_Hosted-Your_Data-555?style=for-the-badge" alt="Self Hosted">
+  <img src="https://img.shields.io/badge/Raspberry_Pi-Ready-333?style=for-the-badge&logo=raspberry-pi&logoColor=white" alt="Raspberry Pi">
+  <img src="https://img.shields.io/badge/Docker-Ready-333?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Nuxt-4-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white" alt="Nuxt 4">
-  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
-</p>
-
-<p align="center">
-  <a href="https://github.com/iamLukyy/fast-uploader/stargazers">
-    <img src="https://img.shields.io/github/stars/iamLukyy/fast-uploader?style=social" alt="Stars">
-  </a>
-  <a href="https://github.com/iamLukyy/fast-uploader/fork">
-    <img src="https://img.shields.io/github/forks/iamLukyy/fast-uploader?style=social" alt="Forks">
-  </a>
+  <img src="https://img.shields.io/badge/Nuxt-4-333?style=for-the-badge&logo=nuxt.js&logoColor=white" alt="Nuxt 4">
+  <img src="https://img.shields.io/badge/SQLite-Database-333?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
 </p>
 
 ---
@@ -48,14 +39,6 @@ Tired of:
 
 ---
 
-## Screenshots
-
-| Login | Dashboard | Share Page |
-|:-----:|:---------:|:----------:|
-| ![Login](https://upload.karel.app/f/b2288bbe-b9ed-4a40-baad-a6db95e1f230.png) | ![Dashboard](https://upload.karel.app/f/96c09446-2e7f-4a4e-ba0d-1fbd980ebea3.png) | ![Share](https://upload.karel.app/f/e16506dc-5db8-4fc7-94b4-52767dfa7ed2.png) |
-
----
-
 ## Features
 
 - **Drag & drop** upload with progress bar
@@ -72,8 +55,8 @@ Tired of:
 ## Quick Start
 
 ```bash
-git clone https://github.com/iamLukyy/fast-uploader.git
-cd fast-uploader
+git clone https://github.com/iamLukyy/drop.git
+cd drop
 cp .env.example .env
 nano .env  # Set your password
 docker compose up -d
@@ -103,11 +86,11 @@ sudo usermod -aG docker $USER
 
 Log out and log back in.
 
-**Step 2: Run Fast Uploader**
+**Step 2: Run Drop**
 
 ```bash
-git clone https://github.com/iamLukyy/fast-uploader.git
-cd fast-uploader
+git clone https://github.com/iamLukyy/drop.git
+cd drop
 cp .env.example .env
 nano .env  # Set NUXT_AUTH_PASSWORD
 docker compose up -d
@@ -146,7 +129,7 @@ http://YOUR_PUBLIC_IP:3000
 **Dynamic IP? Use DuckDNS (free):**
 
 1. Create account at [duckdns.org](https://www.duckdns.org)
-2. Create a subdomain (e.g., `myuploader.duckdns.org`)
+2. Create a subdomain (e.g., `mydrop.duckdns.org`)
 3. Install the update script on your Pi:
 
 ```bash
@@ -160,7 +143,7 @@ chmod 700 ~/duckdns/duck.sh
 */5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1
 ```
 
-Now share: `http://myuploader.duckdns.org:3000`
+Now share: `http://mydrop.duckdns.org:3000`
 
 ---
 
@@ -178,8 +161,8 @@ Most reliable for public access. Always online, static IP, easy HTTPS.
 
 ```bash
 ssh root@your-vps-ip
-git clone https://github.com/iamLukyy/fast-uploader.git
-cd fast-uploader
+git clone https://github.com/iamLukyy/drop.git
+cd drop
 cp .env.example .env
 nano .env
 ```
@@ -234,8 +217,8 @@ docker compose -f docker-compose.traefik.yml up -d
 For home or office use without internet access.
 
 ```bash
-git clone https://github.com/iamLukyy/fast-uploader.git
-cd fast-uploader
+git clone https://github.com/iamLukyy/drop.git
+cd drop
 cp .env.example .env
 nano .env  # Set password
 docker compose up -d

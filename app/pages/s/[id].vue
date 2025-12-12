@@ -125,9 +125,9 @@ onMounted(() => {
       <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <NuxtLink to="/" class="flex items-center gap-3">
           <div class="p-2 rounded-xl bg-primary/10 dark:bg-primary/20 glow-primary">
-            <UIcon name="i-lucide-upload-cloud" class="w-5 h-5 text-primary" />
+            <UIcon name="i-lucide-arrow-down-to-line" class="w-5 h-5 text-primary" />
           </div>
-          <span class="font-bold text-lg">Fast Uploader</span>
+          <span class="font-bold text-lg">Drop</span>
         </NuxtLink>
 
         <ClientOnly>

@@ -82,7 +82,7 @@ const statusIcon = computed(() => {
         class="mt-2 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
       >
         <div
-          class="h-full bg-gradient-to-r from-primary to-green-400 rounded-full transition-all duration-300"
+          class="h-full bg-gradient-to-r from-zinc-600 to-zinc-400 dark:from-zinc-400 dark:to-zinc-300 rounded-full transition-all duration-300"
           :style="{ width: `${upload.progress}%` }"
         />
       </div>

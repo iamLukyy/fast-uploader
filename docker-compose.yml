@@ -1,7 +1,7 @@
 services:
-  fast-uploader:
+  drop:
     build: .
-    container_name: fast-uploader
+    container_name: drop
     restart: unless-stopped
     ports:
       - "3332:3000"

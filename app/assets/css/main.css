@@ -4,18 +4,6 @@
 
 @theme static {
   --font-sans: 'Public Sans', sans-serif;
-
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
-  --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
 }
 
 /* Typography refinements */
@@ -116,17 +104,21 @@
     transform: translateY(-2px);
   }
 
-  /* Primary glow effect */
+  /* Primary glow effect - monochrome */
   .glow-primary {
-    box-shadow: 0 0 20px rgba(0, 193, 106, 0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
   }
 
   .dark .glow-primary {
-    box-shadow: 0 0 30px rgba(0, 193, 106, 0.2);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.06);
   }
 
   /* Focus ring glow */
   .ring-glow:focus-within {
-    box-shadow: 0 0 0 3px rgba(0, 193, 106, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .ring-glow:focus-within {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
   }
 }
