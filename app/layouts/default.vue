@@ -28,14 +28,16 @@ async function handleLogout() {
 
         <div class="flex items-center gap-1">
           <ClientOnly>
-            <UButton
-              :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-              color="neutral"
-              variant="ghost"
-              size="sm"
-              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-              @click="isDark = !isDark"
-            />
+            <UTooltip :delay-duration="0" :text="isDark ? 'Light mode' : 'Dark mode'">
+              <UButton
+                :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+                color="neutral"
+                variant="ghost"
+                size="sm"
+                class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                @click="isDark = !isDark"
+              />
+            </UTooltip>
             <template #fallback>
               <div class="size-8" />
             </template>
