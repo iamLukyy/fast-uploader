@@ -54,14 +54,19 @@ async function handleLogin() {
           <span class="font-bold text-lg">Fast Uploader</span>
         </div>
 
-        <UButton
-          :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-          color="neutral"
-          variant="ghost"
-          size="sm"
-          class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-          @click="isDark = !isDark"
-        />
+        <ClientOnly>
+          <UButton
+            :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+            @click="isDark = !isDark"
+          />
+          <template #fallback>
+            <div class="size-8" />
+          </template>
+        </ClientOnly>
       </div>
     </header>
 

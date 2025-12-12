@@ -130,14 +130,19 @@ onMounted(() => {
           <span class="font-bold text-lg">Fast Uploader</span>
         </NuxtLink>
 
-        <UButton
-          :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-          color="neutral"
-          variant="ghost"
-          size="sm"
-          class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-          @click="isDark = !isDark"
-        />
+        <ClientOnly>
+          <UButton
+            :icon="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+            @click="isDark = !isDark"
+          />
+          <template #fallback>
+            <div class="size-8" />
+          </template>
+        </ClientOnly>
       </div>
     </header>
 
@@ -220,7 +225,7 @@ onMounted(() => {
             <!-- Auto-download toggle -->
             <label class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 cursor-pointer">
               <span>Automatické stahování</span>
-              <USwitch v-model="autoDownloadEnabled" class="cursor-pointer" @update:model-value="saveAutoDownload" />
+              <USwitch v-model="autoDownloadEnabled" :ui="{ base: 'cursor-pointer' }" @update:model-value="saveAutoDownload" />
             </label>
           </div>
         </div>
