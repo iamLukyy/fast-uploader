@@ -42,14 +42,16 @@ async function handleLogout() {
               <div class="size-8" />
             </template>
           </ClientOnly>
-          <UButton
-            icon="i-lucide-log-out"
-            color="neutral"
-            variant="ghost"
-            size="sm"
-            class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-            @click="handleLogout"
-          />
+          <UTooltip :delay-duration="0" text="Logout">
+            <UButton
+              icon="i-lucide-log-out"
+              color="neutral"
+              variant="ghost"
+              size="sm"
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+              @click="handleLogout"
+            />
+          </UTooltip>
         </div>
       </div>
     </header>
