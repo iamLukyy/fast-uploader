@@ -298,7 +298,7 @@ cp -r ./backup-YYYYMMDD/* ./data/
 ```
 
 **Default limits:**
-- Max file size: 500MB (configurable in code)
+- Max file size: 10GB (configurable in code)
 - Storage: Limited only by your disk space
 
 ---

@@ -10,8 +10,8 @@ if (!existsSync(UPLOADS_DIR)) {
   mkdirSync(UPLOADS_DIR, { recursive: true })
 }
 
-// Max file size: 500 MB
-export const MAX_FILE_SIZE = 500 * 1024 * 1024
+// Max file size: 10 GB
+export const MAX_FILE_SIZE = 10 * 1024 * 1024 * 1024
 
 export interface StoredFile {
   id: string

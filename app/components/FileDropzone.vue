@@ -136,7 +136,7 @@ onUnmounted(() => {
       or <span class="text-primary font-medium">click to browse</span>
     </p>
     <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
-      Max 500 MB per file · Ctrl+V to paste
+      Max 10 GB per file · Ctrl+V to paste
     </p>
   </div>
 
